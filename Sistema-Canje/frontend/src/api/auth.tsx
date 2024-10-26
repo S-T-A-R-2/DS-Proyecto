@@ -4,8 +4,10 @@ import { User } from '../logic/classes/User'
 type UserData = {
     username: string;
     name: string;
+    phone: string;
     email: string;
     password: string;
+    rol: string;
 };
 
 export const registerRequest = (userData : UserData) => {return axios.post(`/register`, userData);};

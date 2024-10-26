@@ -13,24 +13,27 @@ type UserRequest = {
 };
 
 export const register = async (req: any, res: any) => {
-    const {username, name, email, password } = req.body
+    const {username, name, phone, email, password, rol } = req.body
     try {
         const users = await User.find({username : username});
         if (users.length > 0) {
             console.log("Usuario ya existente");
+            console.log(users);
             return res.status(400).json({message: "Error: Usuario existente."});
         } else {
             const newUser = new User({
                 username,
                 name,
+                phone,
                 email,
-                password
+                password,
+                rol
             });
             const savedUser = await newUser.save();
             return res.status(201).json(savedUser);
         }
     } catch (error : any) {
-        return res.status(500).json({message: "Error: Usuario existente."});
+        return res.status(500).json({message: error.message});
     }
 
     /*const encrypter = new Encrypter(process.env.ENCRYPT_KEY)

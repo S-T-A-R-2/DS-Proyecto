@@ -31,9 +31,11 @@ interface AuthProviderProps {
 type UserData = {
     username: string;
     name: string;
+    phone: string;
     email: string;
     password: string;
-}
+    rol: string;
+};
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const [user, setUser] = useState<User | null>(null);
@@ -65,8 +67,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
             const user : UserData = {
                 username: res.data.username,
                 name: res.data.name,
+                phone: res.data.phone,
                 email: res.data.email,
-                password: res.data.password
+                password: res.data.password,
+                rol: res.data.rol
             };
             setUser(user);
             setIsAuthenticated(true);

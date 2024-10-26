@@ -3,6 +3,8 @@ import {useForm} from 'react-hook-form'
 import {useAuth} from '../context/auth-context'
 import { useEffect } from 'react';
 import {useNavigate, Link} from 'react-router-dom'
+import Input from '../components/Input';
+import Button from '../components/Button';
 
 
 function RegisterPage() {
@@ -13,66 +15,123 @@ function RegisterPage() {
     type FormData = {
         username: string;
         name: string;
+        phone: string;
         email: string;
         password: string;
+        rol: string;
     };
     
     const { signUp, isAuthenticated, errors: registerErrors } = useAuth();
     const navigate = useNavigate();
 
     const onSubmit = handleSubmit( async (values : FormData) => {
-        const { username, name, email, password } = values;
-        signUp(values);
-
+        const { username, name, phone, email, password, rol } = values;
+        await signUp(values);
+        navigate('/login');
     });
     
+    const labelStyle = "text-sm font-medium text-white mb-1"
+
     return (
         
-    <div className = "max-w-sm bg-zinc-800 max-w-md p-2 rounded-md flex justify-center flex-col m-auto h-screen">
-          <div className="bg-zinc-900 max-w-md w-full p-10 rounded-md">
-                {registerErrors.map((error, i) => (
-                    <div className="bg-red-500 p-2 text-white" key={i}>
-                        {error}
-                    </div>
-                ))}
-                <h1 className="text-white my-2 w-full">Registrar Cuenta</h1>
-
-                <form onSubmit={onSubmit}>
-                    <input type="text" {...register("username", {required: true})}
-                    className = "w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-                    placeholder='Username'/>
-                    {errors.username && (
-                        <p className="text-red-500">Username is required</p>
-                    )}
-                    <input type="text" {...register("name", {required: true})}
-                    className = "w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-                    placeholder='Name'/>  
-                    {errors.name && (
-                        <p className="text-red-500">Name is required</p>
-                    )}    
-                    <input type="email" {...register("email", {required: true})}
-                    className = "w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-                    placeholder='Email'/>
-                    {errors.email && (
-                        <p className="text-red-500">Email is required</p>
-                    )}
-                    <input type="password" {...register("password", {required: true})}
-                    className = "w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-                    placeholder='Password'/> 
-                    {errors.password && (
-                        <p className="text-red-500">Password is required</p>
-                    )}
-
-                    <button type="submit" className = "bg-white text-black px-4 py-2 rounded-md my-2">Registrarse</button>
-            </form>
-
-                <p className="flex gap-x-2 justify-between text-white">
-                    Iniciar Sesión <Link to="/login" className="text-sky-500">Login</Link>
-                </p>
-
+    <div className = "max-w-sm bg-zinc-900 max-w-md p-2 rounded-md flex justify-center flex-col m-auto h-screen">
+        <div className="bg-zinc-900 max-w-md w-full p-10 rounded-md">
+        {registerErrors.map((error, i) => (
+            <div className="bg-red-500 p-2 text-white" key={i}>
+                {error}
             </div>
-        </div>
-    )
-}
+        ))}
+        <h1 className="text-white my-2 w-full">Registrar Cuenta</h1>
+        <form onSubmit={onSubmit} className='flex flex-col space-y-[20px] text-left'>
+            <div className='bg-zinc-900 max-w-md w-full p-10 py-[20px] rounded-md border'>
+            <div>
+                <label
+                    className={labelStyle}>
+                    Nombre Completo
+                </label>
+                <Input
+                    type="text" {...register("name", {required: true})}
+                    placeholder='Nombre completo'
+                />
+                {errors.name && (
+                    <p className="text-red-500">El nombre es requerido</p>
+                )}
+            </div>
+            <div>
+                <label 
+                    className={labelStyle}>
+                    Usuario
+                </label>
+                <Input
+                    type="text" {...register("username", {required: true})}
+                    placeholder='Usuario'
+                />
+                {errors.username && (
+                    <p className="text-red-500">Nombre de usuario es requerido</p>
+                )}
+            </div>
+            
+            <div>
+                <label 
+                    className={labelStyle}>
+                    Correo
+                </label>
+                <Input 
+                    type="email" {...register("email", {required: true})}
+                    placeholder='Correo electrónico'
+                />
+                {errors.email && (
+                    <p className="text-red-500">El correo electrónico es requerido</p>
+                )}
+            </div>
 
+            <div>
+                <label 
+                    className={labelStyle}>
+                    Número de teléfono
+                </label>
+                <Input 
+                    type="text" {...register("phone", {required: true})}
+                    placeholder='Número de teléfono'
+                />
+                {errors.email && (
+                    <p className="text-red-500">El número de teléfono es requerido</p>
+                )}
+            </div>
+
+            <div>
+                <label 
+                    className={labelStyle}>
+                    Contraseña
+                </label>
+                <Input 
+                    type="password" {...register("password", {required: true})}
+                    placeholder='Contraseña'/> 
+                {errors.password && (
+                    <p className="text-red-500">La contraseña es requerida</p>
+                )}
+            </div>
+            
+            <div>
+                <label
+                    className={labelStyle}>
+                    Rol
+                </label>
+                <Input 
+                    type="text" {...register("rol", {required: true})}
+                    placeholder='Rol del usuario'/> 
+                {errors.password && (
+                    <p className="text-red-500">Password is required</p>
+                )}
+            </div>
+            </div>
+
+            <div className='flex flex-row space-x-[60px] items-center px-[28px]'>
+                <Button onClick={() => {navigate('/login');}}>Cancelar</Button>
+                <Button type="submit">Registrarse</Button>
+            </div>
+        </form>
+        </div>
+    </div>
+)}
 export default RegisterPage
