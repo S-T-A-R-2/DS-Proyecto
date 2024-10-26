@@ -3,6 +3,9 @@ import { useForm } from 'react-hook-form'
 import {useNavigate, Link} from 'react-router-dom';
 import { useAuth } from '../context/auth-context';
 
+import Button from '../components/Button'
+import Input from '../components/Input';
+
 function LoginPage() {
     type FormData = {
         username: string;
@@ -40,32 +43,27 @@ function LoginPage() {
             <h1 className="text-2xl font-bold text-white">Iniciar Sesión</h1>
             
             <form onSubmit={onSubmit}>
-                <input
+                <Input 
                     type="text"
                     {...register("username", { required: true })}
-                    className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
                     placeholder="Username"
                 />
+
                 {errors.username && (
                     <p className="text-red-500">Username is required</p>
                 )}
 
-                <input
+                <Input 
                     type="password"
                     {...register("password", { required: true })}
-                    className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
                     placeholder="Password"
                 />
+                
                 {errors.password && (
                     <p className="text-red-500">Password is required</p>
                 )}
 
-                <button
-                    type="submit"
-                    className="bg-white text-black px-4 py-2 rounded-md my-2"
-                >
-                    Login
-                </button>
+                <Button type="submit">Login</Button>
             </form>
 
             <p className="flex gap-x-2 justify-between text-white">
