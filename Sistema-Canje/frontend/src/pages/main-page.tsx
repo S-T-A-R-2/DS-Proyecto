@@ -3,6 +3,7 @@ import Button from '../components/Button';
 import { useAuth } from '../context/auth-context';
 import {useNavigate, useLocation} from 'react-router-dom'
 import Logo from '../images/logo-main.png'
+import Dropdown from '../components/Dropdown';
 
 export const MainPage = () => {
 	const [username, setUsername] = useState<string | null>(null);
@@ -22,6 +23,16 @@ export const MainPage = () => {
 		window.location.reload();
 	}
 
+  const profileOptions = [
+		{ label: 'Cerrar Sesión', onClick: handleLogout },
+    { label: 'Ver Perfil', onClick: handleLogout },
+	];
+
+  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
+  const toggleMenu = () => {
+		setIsOpenMenu(!isOpenMenu);
+	};
+
 return (
 	<div className='text-white bg-zinc-800 flex flex-col m-auto h-screen'>
 		<div className='flex flex-row justify-end items-start p-4'>
@@ -30,12 +41,13 @@ return (
         <p>{user?.rol}</p>
         {username && (
           <div className='flex flex-col'>
-            <Button onClick={() => {localStorage.setItem('user', JSON.stringify(user));}}>
-              <h3 className="flex space-x-3text-slate-900 group-hover:text-white text-sm font-semibold inline text-center">Ver perfil</h3>	
-            </Button>
-            <Button onClick={handleLogout}>
-              <h3 className="flex space-x-3text-slate-900 group-hover:text-white text-sm font-semibold inline text-center">🚪 Cerrar Sesión</h3>	
-            </Button>
+            <Dropdown
+              buttonText="Opciones" 
+              action={toggleMenu} 
+              isActive={isOpenMenu} 
+              options={profileOptions}
+              showHeader={true}
+            />
           </div>
         )}
       </div>
@@ -45,18 +57,22 @@ return (
       <img src={Logo} className="w-20 rounded-md shadow-lg"/>
       
       <div className='flex flex-col space-y-[10px] py-[50px]'>
-        <Button>Buscar Factura</Button>
-        <Button>Registrar Factura</Button>
+        <Button onClick={() => {navigate('/find-invoice')}}>Buscar Factura</Button>
+        <Button onClick={() => {navigate('/register-invoice')}}>Registrar Factura</Button>
         {user?.rol == 'Cliente' && (
           <div>
             <Button>Ver Puntos</Button>
           </div>
         )}
+        {user?.rol == 'Admin' && (
+          <div>
+            <Button onClick={() => {navigate('/medicine')}}>Ver Medicamentos</Button>
+          </div>
+        )}
 
         {user?.rol == 'Admin' && (
           <div>
-            <Button>Registrar Usuario</Button>
-            <Button>Buscar Factura</Button>
+            <Button onClick={() => {navigate('/register', {state: {user : user}})}}>Registrar Usuario</Button>
           </div>
         )}
       </div>

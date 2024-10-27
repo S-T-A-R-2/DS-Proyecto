@@ -1,8 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
 import { registerRequest, loginRequest, verifyTokenRequest } from '../api/auth';
 import Cookies from 'js-cookie';
-import { User } from '../logic/classes/User'
-import axios from '../api/axios';
 
 interface AuthContextType {
     signUp: (userData : UserData) => Promise<void>;

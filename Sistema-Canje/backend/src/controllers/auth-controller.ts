@@ -91,7 +91,7 @@ export const login = async (req: any, res: any) => {
             secure: true,
             httpOnly: false
         });*/
-        return res.status(200).json({ message: 'Login successful', username });
+        return res.status(200).json(user);
     } catch (error: any) {
         console.error('Error logging in user:', error);
         res.status(500).json({ messages: ['Error logging in user', error.message] });
