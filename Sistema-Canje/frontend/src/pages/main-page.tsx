@@ -34,7 +34,7 @@ export const MainPage = () => {
 	};
 
 return (
-	<div className='text-white bg-zinc-800 flex flex-col m-auto h-screen'>
+	<div className='text-white bg-zinc-900 flex flex-col m-auto h-screen max-w-[800px]'>
 		<div className='flex flex-row justify-end items-start p-4'>
       <div className='flex flex-col w-[150px] text-center'>
         <p>{user?.username}</p>
@@ -54,7 +54,7 @@ return (
     </div>
     <div className='flex flex-col items-center justify-center'>
       <h1 className="text-4xl">Beneficios</h1>
-      <img src={Logo} className="w-20 rounded-md shadow-lg"/>
+      <img src={Logo} className="w-20 rounded-md shadow-lg py-8"/>
       
       <div className='flex flex-col space-y-[10px] py-[50px]'>
         <Button onClick={() => {navigate('/find-invoice')}}>Buscar Factura</Button>
