@@ -9,7 +9,7 @@ interface AuthContextType {
     signIn: (userData : {username : string, password : string}) => Promise<void>;
     logout: () => void;
     loading: boolean;
-    user: User | null;
+    user: UserData | null;
     isAuthenticated: boolean;
     errors: string[];
 }
@@ -38,7 +38,7 @@ type UserData = {
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserData | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);

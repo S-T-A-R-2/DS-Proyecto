@@ -2,7 +2,7 @@ import mongoose, { ConnectOptions } from 'mongoose';
 
 export const connectDB = async (): Promise<void> => {
     try {
-        await mongoose.connect("mongodb+srv://geraldcalderon016:we2Q29uMCJlHo5DI@cluster0.3jasz.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0", {
+        await mongoose.connect("mongodb+srv://josserrano:Qs0uOIzrv4opdEO1@clusterdiseno.ciz75.mongodb.net/?retryWrites=true&w=majority&appName=ClusterDiseno", {
             serverSelectionTimeoutMS: 30000, // Tiempo de espera para la selección del servidor
             socketTimeoutMS: 45000,
         } as ConnectOptions); // Forzar las opciones como `ConnectOptions`
