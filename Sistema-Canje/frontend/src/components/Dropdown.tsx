@@ -16,7 +16,7 @@ interface DropdownProps {
 export default function Dropdown({buttonText, action, isActive, options, showHeader}: DropdownProps){
     return (
         <div className='text-white bg-zinc-800 flex flex-col m-auto'>
-            <Button onClick={action}>
+            <Button onClick={action} type='button'>
                 {buttonText}
                 {showHeader && (
                     <svg
@@ -36,7 +36,7 @@ export default function Dropdown({buttonText, action, isActive, options, showHea
                     <ul >
                         {options.map((option, index) => (
                         <li key={index}>
-                        <Button onClick={option.onClick} className="px-4 py-2 bg-white w-full">
+                        <Button onClick={option.onClick} type='button' className="px-4 py-2 bg-white w-full">
                             {option.label}
                         </Button>
                         </li>

@@ -1,11 +1,11 @@
 import React from 'react'
 import {useForm} from 'react-hook-form'
 import {useAuth} from '../context/auth-context'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {useNavigate, Link} from 'react-router-dom'
 import Input from '../components/Input';
 import Button from '../components/Button';
-
+import Dropdown from '../components/Dropdown';
 
 function RegisterPage() {
     const { register, handleSubmit, formState: {
@@ -18,19 +18,30 @@ function RegisterPage() {
         phone: string;
         email: string;
         password: string;
-        rol: string;
     };
     
     const { signUp, isAuthenticated, errors: registerErrors } = useAuth();
     const navigate = useNavigate();
 
     const onSubmit = handleSubmit( async (values : FormData) => {
-        const { username, name, phone, email, password, rol } = values;
-        await signUp(values);
+        await signUp({...values, rol: rol});
         navigate('/login');
     });
     
     const labelStyle = "text-sm font-medium text-white mb-1"
+
+    const [rol, setRol] = useState<string>("Cliente")
+
+    const profileOptions = [
+		{ label: 'Cliente', onClick: () => {setRol('Cliente'); setIsOpenMenu(!isOpenMenu)}},
+        { label: 'Operativo', onClick: () => {setRol('Operativo'); setIsOpenMenu(!isOpenMenu)} },
+        { label: 'Admin', onClick: () => {setRol('Admin'); setIsOpenMenu(!isOpenMenu)} },
+	];
+
+    const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
+    const toggleMenu = () => {
+		setIsOpenMenu(!isOpenMenu);
+	};
 
     return (
         
@@ -117,9 +128,14 @@ function RegisterPage() {
                     className={labelStyle}>
                     Rol
                 </label>
-                <Input 
-                    type="text" {...register("rol", {required: true})}
-                    placeholder='Rol del usuario'/> 
+                <Dropdown
+                    buttonText={rol}
+                    action={toggleMenu} 
+                    isActive={isOpenMenu} 
+                    options={profileOptions}
+                    showHeader={true}
+                />
+                
                 {errors.password && (
                     <p className="text-red-500">Password is required</p>
                 )}
