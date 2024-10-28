@@ -4,6 +4,7 @@ import {AuthProvider} from './context/auth-context';
 import MainPage from './pages/main-page';
 import LoginPage from './pages/login-page';
 import RegisterPage from './pages/register-page';
+import FindInvoicePage from "./pages/find-invoice-page";
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Route path="/main" element = {<MainPage />} />
             <Route path="/register" element = {<RegisterPage />} />
             <Route path="/login" element = {<LoginPage />} />
+            <Route path="/find-invoice" element = {<FindInvoicePage/>}/>
             {/*<Route path="/searchBlog" element = {<SeachRepositoryPage/>}/>
             <Route path="/blog/:id" element = {<RepositoryPage/>}/>
             <Route path="/blog/:id/AddFilePage" element = {<AddFilesPage/>}/>
