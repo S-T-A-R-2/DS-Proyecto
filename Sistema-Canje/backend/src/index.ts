@@ -1,6 +1,7 @@
 import express from 'express';
 //import blogsRoutes from "./routes/blogs.route.js"
 import authRoutes from './routes/auth-route'
+import invoiceRoutes from './routes/invoice-route'
 //import cookieParser from 'cookie-parser'
 import cors from 'cors';
 import {connectDB} from './db'
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 //app.use("/api", blogsRoutes);
 app.use("/api", authRoutes);
+app.use("/api", invoiceRoutes)
 app.listen(5000);
 
 export default app;
