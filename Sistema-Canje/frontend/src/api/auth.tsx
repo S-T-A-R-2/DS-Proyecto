@@ -30,3 +30,5 @@ export const createInvoice = (invoice : InvoiceData) => {
     return axios.post('/createInvoice',invoice);
 }
 
+export const getAllInvoices = () => axios.get('/get-all-invoice'); 
+
