@@ -4,8 +4,14 @@ import {AuthProvider} from './context/auth-context';
 import MainPage from './pages/main-page';
 import LoginPage from './pages/login-page';
 import RegisterPage from './pages/register-page';
+
 import ProtectedRoute from './context/ProtectedRoute';
+
+import CreateInvoice from './pages/create-invoice-page';
+import FindInvoicePage from "./pages/find-invoice-page";
+
 import './App.css';
+
 
 function App() {
   return (
@@ -16,10 +22,15 @@ function App() {
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/register" element = {<RegisterPage />} />
             <Route path="/login" element = {<LoginPage />} />
+
             <Route element={<ProtectedRoute />}>
               <Route path="/main" element={<MainPage />} />
               {/*otras rutas protegidas*/}
             </Route>
+
+            <Route path="/createInvoice" element = {<CreateInvoice/>} />
+            <Route path="/find-invoice" element = {<FindInvoicePage/>}/>
+
             {/*<Route path="/searchBlog" element = {<SeachRepositoryPage/>}/>
             <Route path="/blog/:id" element = {<RepositoryPage/>}/>
             <Route path="/blog/:id/AddFilePage" element = {<AddFilesPage/>}/>
