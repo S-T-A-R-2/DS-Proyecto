@@ -4,6 +4,7 @@ import {AuthProvider} from './context/auth-context';
 import MainPage from './pages/main-page';
 import LoginPage from './pages/login-page';
 import RegisterPage from './pages/register-page';
+import ProtectedRoute from './context/ProtectedRoute';
 import './App.css';
 
 function App() {
@@ -13,9 +14,12 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="/main" element = {<MainPage />} />
             <Route path="/register" element = {<RegisterPage />} />
             <Route path="/login" element = {<LoginPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/main" element={<MainPage />} />
+              {/*otras rutas protegidas*/}
+            </Route>
             {/*<Route path="/searchBlog" element = {<SeachRepositoryPage/>}/>
             <Route path="/blog/:id" element = {<RepositoryPage/>}/>
             <Route path="/blog/:id/AddFilePage" element = {<AddFilesPage/>}/>
