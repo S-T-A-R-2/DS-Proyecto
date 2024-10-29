@@ -4,19 +4,41 @@ import { useAuth } from '../context/auth-context';
 import {useNavigate, useLocation} from 'react-router-dom'
 import Logo from '../images/logo-main.png'
 import Dropdown from '../components/Dropdown';
+import {getAllInvoices} from '../api/auth';
 
 export const FindInvoicePage = () => {
 	const [username, setUsername] = useState<string | null>(null);
 	const [password, setPassword] = useState<string | null>(null);
 	const { isAuthenticated, logout, user } = useAuth();
 	const navigate = useNavigate();
+  type InvoiceData = {
     
-    useEffect(() => {
-      if (isAuthenticated && user) {
-        setUsername(user.username);
-        setPassword(user.password);
-      }
-    }, [isAuthenticated, user]);
+  }
+  const [invoices, setInvoices] = useState<InvoiceData|null>(null);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      setUsername(user.username);
+      setPassword(user.password);
+    }
+  }, [isAuthenticated, user]);
+
+  const [loadInvoices, setLoadInvoices] = useState<boolean>(true);
+
+  useEffect(()  => {
+    const getAllInvoicesAux = async () => {
+      const resp = (await getAllInvoices()).data;
+      setInvoices(resp);
+    }
+    if (loadInvoices){
+      getAllInvoicesAux();
+      setLoadInvoices(!loadInvoices);
+    }
+  }, [username])
+
+  useEffect(() => {
+    console.log(invoices);
+  }, [invoices])
 
 	const handleLogout = () => {
 		logout();

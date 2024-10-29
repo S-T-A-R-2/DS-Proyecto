@@ -28,7 +28,7 @@ function App() {
               {/*otras rutas protegidas*/}
             </Route>
 
-            <Route path="/createInvoice" element = {<CreateInvoice/>} />
+            <Route path="/register-invoice" element = {<CreateInvoice/>} />
             <Route path="/find-invoice" element = {<FindInvoicePage/>}/>
 
             {/*<Route path="/searchBlog" element = {<SeachRepositoryPage/>}/>

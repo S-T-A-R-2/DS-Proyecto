@@ -96,22 +96,6 @@ function CreateInvoice() {
         }
     }, [isAuthenticated, navigate]);
 
-
-    // Cambiar para farmacias y medicamentos
-    const [rol, setRol] = useState<string>("Cliente");
-
-    const profileOptions = [
-		{ label: 'Cliente', onClick: () => {setRol('Cliente'); setIsOpenMenu(!isOpenMenu)}},
-        { label: 'Operativo', onClick: () => {setRol('Operativo'); setIsOpenMenu(!isOpenMenu)} },
-        { label: 'Admin', onClick: () => {setRol('Admin'); setIsOpenMenu(!isOpenMenu)} },
-	];
-
-    const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-    const toggleMenu = () => {
-		setIsOpenMenu(!isOpenMenu);
-	};
-
-
     return (
     <div className="ytd-rich-grid-renderer h-screen  justify-center">
         <h1 className="text-2xl font-bold text-white">Iniciar Sesión</h1>
@@ -161,15 +145,6 @@ function CreateInvoice() {
                         className="text-sm font-medium text-white mb-1" htmlFor="inputFarmacia">
                         Farmacia
                     </label>
-                    
-                    <Dropdown
-                        buttonText={rol}
-                        action={toggleMenu} 
-                        isActive={isOpenMenu} 
-                        options={profileOptions}
-                        showHeader={true}
-                    />
-
                     <Input 
                         id="inputFarmacia"
                         type="text"
