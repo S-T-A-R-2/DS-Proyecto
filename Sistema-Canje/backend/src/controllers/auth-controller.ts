@@ -5,6 +5,9 @@
 import User from '../models/user-model';
 import { Request, Response } from 'express';
 
+import { createAccessToken } from '../libs/jwt';
+import jwt from 'jsonwebtoken';
+
 type UserRequest = {
     username: string;
     name: string;
@@ -30,6 +33,16 @@ export const register = async (req: any, res: any) => {
                 rol
             });
             const savedUser = await newUser.save();
+
+            const token = await createAccessToken({ id: username, username });
+            res.cookie('token', token, {
+                sameSite: 'none',
+                secure: true,
+                httpOnly: false
+            });
+
+
+
             return res.status(201).json(savedUser);
         }
     } catch (error : any) {
@@ -85,18 +98,41 @@ export const login = async (req: any, res: any) => {
         if (decryptedPassword !== password) {
             return res.status(401).json({ messages: ['Incorrect Password'] });
         }
-        /*const token = await createAccessToken({ id: username, username });
+
+        const token = await createAccessToken({ id: username, username });
         res.cookie('token', token, {
             sameSite: 'none',
             secure: true,
             httpOnly: false
-        });*/
+        });
+
         return res.status(200).json(user);
     } catch (error: any) {
         console.error('Error logging in user:', error);
         res.status(500).json({ messages: ['Error logging in user', error.message] });
     }
 };
+
+export const verifyToken = async (req: any, res: any) => {
+    const { token } = req.cookies;
+    if (!token) {
+        return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+
+    jwt.verify(token, "TOKEN_SECRET", async (err: any, decoded: any) => {
+        if (err) return res.status(403).json({ message: "authorization denied" });
+        const { username } = decoded;
+
+        const user = await User.find({username : username});
+        if (!user) {
+            return res.status(404).json({messages: ['User not found']});
+        }
+        return res.json(user);
+
+    });
+};
+
+
 /*
 export const logout = async (req, res) => {
     res.cookie('token', "", {

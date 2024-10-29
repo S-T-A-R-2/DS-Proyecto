@@ -102,7 +102,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     useEffect(() => {
         async function checkLogin() {
             const cookies = Cookies.get()
-            
+
             if (!cookies.token) {
                 setIsAuthenticated(false);
                 setLoading(false);
@@ -115,9 +115,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
                         setLoading(false);
                         return
                     }
+
+                    const user = res.data[0];
+                    const userData = {
+                        username: user.username,
+                        name: user.name,
+                        phone: user.phone,
+                        email: user.email,
+                        password: user.password,
+                        rol: user.rol
+                    }
+
                     setIsAuthenticated(true);
-                    setUser(res.data);
+                    setUser(userData);
                     setLoading(false);
+
                 } catch (error) {
                     setIsAuthenticated(false);
                     setUser(null);
