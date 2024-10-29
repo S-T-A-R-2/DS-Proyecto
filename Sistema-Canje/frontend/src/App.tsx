@@ -10,6 +10,8 @@ import ProtectedRoute from './context/ProtectedRoute';
 import CreateInvoice from './pages/create-invoice-page';
 import FindInvoicePage from "./pages/find-invoice-page";
 
+import MedicinePage from './pages/medicine-page';
+
 import './App.css';
 
 
@@ -23,14 +25,15 @@ function App() {
             <Route path="/register" element = {<RegisterPage />} />
             <Route path="/login" element = {<LoginPage />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path="/main" element={<MainPage />} />
-              {/*otras rutas protegidas*/}
-            </Route>
-
             <Route path="/createInvoice" element = {<CreateInvoice/>} />
             <Route path="/find-invoice" element = {<FindInvoicePage/>}/>
 
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/main" element={<MainPage />} />
+              <Route path="/medicine" element={<MedicinePage />} />
+              {/*otras rutas protegidas*/}
+            </Route>
             {/*<Route path="/searchBlog" element = {<SeachRepositoryPage/>}/>
             <Route path="/blog/:id" element = {<RepositoryPage/>}/>
             <Route path="/blog/:id/AddFilePage" element = {<AddFilesPage/>}/>
