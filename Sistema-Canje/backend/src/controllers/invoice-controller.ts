@@ -16,11 +16,57 @@ export const createInvoice = async (req: any, res: any) => {
 export const getAllInvoice = async (req: any, res: any) => {
     try {
         const invoices = await Invoice.find({});
-        console.log(invoices);
         res.json(invoices);
     } catch (error: any) {
         res.status(500).json({ message: "Uyuyui", error: error.message });
     }
+};
+
+export const filterInvoices= async (req: any, res: any) => {
+  try {
+    const {stateFilter, dateRangeFilter, searchInvoiceNumber} = req.query;
+    const query: any = {};
+
+    if (searchInvoiceNumber && searchInvoiceNumber.trim() !== "") {
+      const invoiceNumber = Number(searchInvoiceNumber);
+      if (!isNaN(invoiceNumber)) {
+        query.number = invoiceNumber;
+      }
+    }
+
+    if (stateFilter){
+      const filterStates = JSON.parse(JSON.stringify(stateFilter));
+      const statesArray: string[] = [];
+
+      for (const state in filterStates) {
+        if (filterStates[state] == "true") {
+          statesArray.push(state);
+        }
+      }
+
+      if (statesArray.length > 0) {
+         query.state = {$in :statesArray};
+      }
+    }
+    
+    if (dateRangeFilter) {
+      const { start, end } = dateRangeFilter;
+      if ((start && start.trim() !== "") || (end && end.trim() !== "")) {query.date = {};}
+
+      if (start && start.trim() !== "") {
+        query.date.$lte = start;
+      }
+      if (end && end.trim() !== "") {
+        query.date.$gte = end;
+      }
+    }
+    
+    const invoices = await Invoice.find(query);
+    res.json(invoices);
+
+  } catch (error:any) {
+    res.status(500).json({message:"Uyuyuyyui", error:error.message});
+  }
 };
 
 /*

@@ -1,10 +1,12 @@
 import React, {useState, useEffect, useInsertionEffect} from 'react'
 import Button from '../components/Button';
+import InvoiceList from '../components/InvoiceList';
 import { useAuth } from '../context/auth-context';
 import {useNavigate, useLocation} from 'react-router-dom'
 import Logo from '../images/logo-main.png'
 import Dropdown from '../components/Dropdown';
-import {getAllInvoices} from '../api/auth';
+import {getAllInvoices, filterInvoices} from '../api/auth';
+
 
 export const FindInvoicePage = () => {
 	const [username, setUsername] = useState<string | null>(null);
@@ -12,9 +14,22 @@ export const FindInvoicePage = () => {
 	const { isAuthenticated, logout, user } = useAuth();
 	const navigate = useNavigate();
   type InvoiceData = {
-    
+    number: number;
+    date: string;
+    pharmacyId: string;
+    medicineId: string;
+    quantity: number;
+    imageId: string;
+    state: string;
   }
-  const [invoices, setInvoices] = useState<InvoiceData|null>(null);
+  const [stateFilter, setStateFilter] = useState({
+        Aprobada: true,
+        Rechazada: true,
+        EnEspera: true,
+  });
+  const [dateRangeFilter, setDateRangeFilter] = useState<{ start?: string; end?: string } | null>(null);
+  const [invoicesF, setInvoices] = useState<InvoiceData[]|null>(null);
+  const [searchInvoiceNumber, setSearchInvoiceNumber] = useState<string>("");
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -27,28 +42,46 @@ export const FindInvoicePage = () => {
 
   useEffect(()  => {
     const getAllInvoicesAux = async () => {
-      const resp = (await getAllInvoices()).data;
-      setInvoices(resp);
+      const resp = await getAllInvoices();
+      setInvoices(resp.data);
     }
     if (loadInvoices){
       getAllInvoicesAux();
       setLoadInvoices(!loadInvoices);
     }
   }, [username])
-
+   
   useEffect(() => {
-    console.log(invoices);
-  }, [invoices])
+    console.log(invoicesF);
+  }, [invoicesF])
+  
+  const handleSearch = async () => {
+      const resp = await filterInvoices(stateFilter, dateRangeFilter, searchInvoiceNumber);
+      setInvoices(resp.data);
+  }
 
 	const handleLogout = () => {
 		logout();
 		window.location.reload();
-	}
+	};
 
   const profileOptions = [
 		{ label: 'Cerrar Sesión', onClick: handleLogout },
     { label: 'Ver Perfil', onClick: handleLogout },
 	];
+
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setStateFilter((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchInvoiceNumber(e.target.value);
+  };
 
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const toggleMenu = () => {
@@ -83,41 +116,72 @@ return (
           <div>
               <h2>Filtrar por Estado</h2>
               <label className="flex items-center mb-2">
-                <input type="checkbox" className="mr-2" /> Aprobada
+                <input  type="checkbox" 
+                        className="mr-2"
+                        name="Aprobada"
+                        checked={stateFilter.Aprobada}
+                        onChange={handleCheckboxChange}
+                /> 
+                Aprobada
               </label>
               <label className="flex items-center mb-2">
-                <input type="checkbox" className="mr-2" /> Rechazada
+                <input  type="checkbox" 
+                        className="mr-2"
+                        name="Rechazada"
+                        checked={stateFilter.Rechazada}
+                        onChange={handleCheckboxChange}
+                /> 
+                Rechazada
               </label>
               <label className="flex items-center">
-                <input type="checkbox" className="mr-2" /> En espera
+                <input  type="checkbox" 
+                        className="mr-2" 
+                        name="EnEspera"
+                        checked={stateFilter.EnEspera}
+                        onChange={handleCheckboxChange}
+                />
+                En espera
               </label>
           </div>
           <div className="flex flex-col space-y-2">
             <h2>Filtrar por Fecha</h2> 
             <h3 className="text-sm">Fecha más reciente</h3>
-            <input type="date" className="border rounded text-black p-2"/>
+            <input  type="date" 
+                    className="border rounded text-black p-2"
+                    onChange={(e) => setDateRangeFilter(prev => ({ ...prev, start: e.target.value }))}
+            />
+              
             <h3 className="text-sm">Fecha más vieja</h3>
-            <input type="date" className="border rounded text-black p-2"/>
+            <input  type="date" 
+                    className="border rounded text-black p-2"
+                    onChange={(e) => setDateRangeFilter(prev => ({ ...prev, end: e.target.value }))}
+            />
           </div>
         </div>
         {/*Muestra facturas*/}
         <div className="text-left ml-4 p-4 flex flex-col space-y-2 space-x-2 w-3/4">
           <div className="text-left ml-2 p-2 flex space-x-2 w-3/4">
-              <input type="text" placeholder="Buscar Facturas" className="bg-white p-2 rounded w-full"/>
-              <Button className="text-xl p-4">Buscar</Button>
+              <input  type="text" 
+                      placeholder="Buscar Facturas por número" 
+                      className="bg-white p-2 rounded w-full text-gray-800"
+                      onChange={handleSearchChange}
+              />        
+              <Button className="text-xl p-4" onClick={handleSearch}>Buscar/Filtrar</Button>
           </div>
-          <div className="w-full">
-              Facturas
-          </div>
+          {invoicesF ? (
+            <InvoiceList invoices={invoicesF} className="w-full"></InvoiceList>
+          ) : (
+            <p className="text-left text-white w-full">Loading Invoices ...</p>
+          )}
         </div>
       </div>
       {/*Botones*/}
       <div className="flex mt-4 space-x-2 justify-center">
         <Button className="text-xl p-2">Ver Factura</Button>
-        <Button className="text-xl p-2">Crear Factura</Button>
+        <Button className="text-xl p-2" onClick={()=>navigate('/register-invoice')}>Crear Factura</Button>
       </div>
       <div className="absolute bottom-4 right-4">
-        <a href="/main" className="text-xl font-semibold bg-white text-black p-2 rounded">Volver</a>
+        <Button onClick={()=>navigate('/main')}>Volver</Button>
       </div>
     </div>
   </div>
