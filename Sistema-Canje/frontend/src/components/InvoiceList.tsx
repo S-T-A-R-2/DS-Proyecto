@@ -16,6 +16,7 @@ interface Invoice {
 interface InvoiceListProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof invoiceListVariants> {
     children?: ReactNode;
     invoices: Invoice[];
+    onclick: (invoice:Invoice) => void;
 }
 
 export default function InvoiceList({ 
@@ -24,6 +25,7 @@ export default function InvoiceList({
     variant, 
     size, 
     invoices,
+    onclick, 
     ...props 
 }: InvoiceListProps) {
     return (
@@ -31,19 +33,20 @@ export default function InvoiceList({
             className={twMerge(
                 clsx(
                     invoiceListVariants({ variant, size, className }),
-                    "max-h-96 overflow-y-auto" // Fixed max-height with vertical scrolling
+                    "max-h-[500px] overflow-y-auto" // Fixed max-height with vertical scrolling
                 )
             )}
             {...props}
         >
             {children}
-            <ul className="space-y-2">
+            <ul className="space-y-2 w-full">
                 {invoices.map((invoice) => (
                     <li key={invoice.number} className="p-2 border-b border-gray-500">
-                        <div className="text-lg">Factura {invoice.number}</div>
-                        <div className="text-base text-gray-800">Fecha: {invoice.date}</div>
-                        <div className="text-base text-gray-800">Estado: {invoice.state}</div>
-                        {/* Add additional invoice details here as needed */}
+                      <div onClick={() => onclick(invoice)} className="flex flex-col text-gray-800">
+                        <p className="text-black">Factura {invoice.number}</p>
+                        <p>Fecha: {invoice.date}</p> 
+                        <p>Estado: {invoice.state}</p>
+                      </div>
                     </li>
                 ))}
             </ul>
