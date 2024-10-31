@@ -20,6 +20,13 @@ type InvoiceData = {
     state: string;
 };
 
+type MedicineData = {
+    name: string;
+    description: string;
+    redeeming_points: number;
+    points_given: number;
+};
+
 export const registerRequest = (userData : UserData) => {return axios.post(`/register`, userData);};
 export const loginRequest = (userData : {username : string, password : string}) => 
     axios.post(`/login`, userData);
@@ -34,3 +41,11 @@ export const getAllInvoices = () => axios.get('/get-all-invoice');
 export const filterInvoices = (stateFilter:any, dateRangeFilter:any, searchInvoiceNumber:any) => axios.get('/filter-invoices', {
   params:{stateFilter, dateRangeFilter, searchInvoiceNumber}
 });
+
+//Medicines
+export const getMedicines = () => {return axios.get('/getmedicines');};
+export const filterMedicines = (searchName: any, inBenefitsProgram: any) => axios.get('/filter-medicines', {
+    params: {searchName, inBenefitsProgram}
+});
+export const updateRedeemPoints = (medicine: MedicineData) => axios.put('/updateRedeem', medicine);
+export const updateGivenPoints = (medicine: MedicineData) => axios.put('/updateGiven', medicine);

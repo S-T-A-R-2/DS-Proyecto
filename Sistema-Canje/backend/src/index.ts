@@ -5,7 +5,8 @@ import authRoutes from './routes/auth-route'
 import cookieParser from 'cookie-parser'
 
 import invoiceRoutes from './routes/invoice-route'
-//import cookieParser from 'cookie-parser'
+
+import medicineRoutes from './routes/medicine-route'
 
 import cors from 'cors';
 import {connectDB} from './db'
@@ -26,6 +27,8 @@ app.use(cookieParser());
 //app.use("/api", blogsRoutes);
 app.use("/api", authRoutes);
 app.use("/api", invoiceRoutes)
+app.use("/api", medicineRoutes);
+
 app.listen(5000);
 
 export default app;
