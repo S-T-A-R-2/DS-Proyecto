@@ -45,3 +45,7 @@ export const getMedicines = () => {return axios.get('/getmedicines');};
 export const filterMedicines = () => {return axios.get('/filtermedicines');};
 export const updatePoints = (medicine : MedicineData) => {return axios.put('/updatepoints',medicine);};
 
+export const getAllInvoices = () => axios.get('/get-all-invoice'); 
+export const filterInvoices = (stateFilter:any, dateRangeFilter:any, searchInvoiceNumber:any) => axios.get('/filter-invoices', {
+  params:{stateFilter, dateRangeFilter, searchInvoiceNumber}
+});

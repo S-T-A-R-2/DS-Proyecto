@@ -34,6 +34,10 @@ function App() {
               <Route path="/medicine" element={<MedicinePage />} />
               {/*otras rutas protegidas*/}
             </Route>
+
+            <Route path="/register-invoice" element = {<CreateInvoice/>} />
+            <Route path="/find-invoice" element = {<FindInvoicePage/>}/>
+
             {/*<Route path="/searchBlog" element = {<SeachRepositoryPage/>}/>
             <Route path="/blog/:id" element = {<RepositoryPage/>}/>
             <Route path="/blog/:id/AddFilePage" element = {<AddFilesPage/>}/>
