@@ -70,7 +70,11 @@ export const FindInvoicePage = () => {
     { label: 'Ver Perfil', onClick: handleLogout },
 	];
 
-
+  const handleInvoiceClick = (invoice:InvoiceData) => {
+    localStorage.setItem('invoice', JSON.stringify(invoice));
+    navigate('/see-invoice');
+  }
+    
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setStateFilter((prev) => ({
@@ -169,7 +173,7 @@ return (
               <Button className="text-xl p-4" onClick={handleSearch}>Buscar/Filtrar</Button>
           </div>
           {invoicesF ? (
-            <InvoiceList invoices={invoicesF} className="w-full"></InvoiceList>
+            <InvoiceList onclick={handleInvoiceClick} invoices={invoicesF} className="w-full"></InvoiceList>
           ) : (
             <p className="text-left text-white w-full">Loading Invoices ...</p>
           )}
@@ -177,7 +181,6 @@ return (
       </div>
       {/*Botones*/}
       <div className="flex mt-4 space-x-2 justify-center">
-        <Button className="text-xl p-2">Ver Factura</Button>
         <Button className="text-xl p-2" onClick={()=>navigate('/register-invoice')}>Crear Factura</Button>
       </div>
       <div className="absolute bottom-4 right-4">

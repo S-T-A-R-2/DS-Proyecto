@@ -46,7 +46,6 @@ function CreateInvoice() {
     }
     
     const onSubmit = handleSubmit(async (data: FormData) => {
-        console.log(typeof data);
         const {number, date, pharmacy, medicine, quantity, imageL, state} = data;
         const file = imageL[0];
         const reader = new FileReader();
@@ -68,6 +67,7 @@ function CreateInvoice() {
                 state
             };
             try {
+                console.log(invoiceData);
                 await createInvoice(invoiceData);
             } catch (error: any){
                 console.log(error.message);
