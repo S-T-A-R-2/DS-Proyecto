@@ -13,7 +13,6 @@ export const getMedicines = async (req: any, res: any) => {
 };
 
 export const filterMedicines = async (req: any, res: any) => {
-    console.log(req.query);
     try {
         const {searchName, inBenefitsProgram} = req.query;
         const query: any = {};
