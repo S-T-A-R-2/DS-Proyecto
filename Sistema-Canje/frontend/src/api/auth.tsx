@@ -22,12 +22,9 @@ type InvoiceData = {
 
 type MedicineData = {
     name: string;
-    code: string;
-    isRedeemable: boolean;
     description: string;
-    presentation: string;
-    pointsRequired: number;
-    pointsAwarded: number;
+    redeeming_points: number;
+    points_given: number;
 };
 
 export const registerRequest = (userData : UserData) => {return axios.post(`/register`, userData);};
@@ -40,12 +37,15 @@ export const createInvoice = (invoice : InvoiceData) => {
     return axios.post('/createInvoice',invoice);
 }
 
-//Medicines
-export const getMedicines = () => {return axios.get('/getmedicines');};
-export const filterMedicines = () => {return axios.get('/filtermedicines');};
-export const updatePoints = (medicine : MedicineData) => {return axios.put('/updatepoints',medicine);};
-
 export const getAllInvoices = () => axios.get('/get-all-invoice'); 
 export const filterInvoices = (stateFilter:any, dateRangeFilter:any, searchInvoiceNumber:any) => axios.get('/filter-invoices', {
   params:{stateFilter, dateRangeFilter, searchInvoiceNumber}
 });
+
+//Medicines
+export const getMedicines = () => {return axios.get('/getmedicines');};
+export const filterMedicines = (searchName: any, inBenefitsProgram: any) => axios.get('/filter-medicines', {
+    params: {searchName, inBenefitsProgram}
+});
+export const updateRedeemPoints = (medicine: MedicineData) => axios.put('/updateRedeem', medicine);
+export const updateGivenPoints = (medicine: MedicineData) => axios.put('/updateGiven', medicine);

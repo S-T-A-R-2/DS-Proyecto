@@ -1,44 +1,71 @@
 import Medicine from '../models/medicine-model';
 import { Request, Response } from 'express';
 
+
+
 export const getMedicines = async (req: any, res: any) => {
     try {
-        console.log("hola get medicinas");
-        // const medicines = await Medicine.find();
-        // return res.status(200).json(medicines);
-        return res.status(200).json({message: "hola"});
-
+        const medicines = await Medicine.find({});
+        res.json(medicines);
     } catch (error: any) {
-        //return res.status(500).json({message: error.message});
-        console.log("error medicinas" + error.message);
-        return res.status(500).json({message: error.message});
+        res.status(500).json({ message: "AAAA", error: error.message });
     }
 };
 
 export const filterMedicines = async (req: any, res: any) => {
+    console.log(req.query);
     try {
-        console.log("hola filter medicinas");
-        // const medicines = await Medicine.find();
-        // return res.status(200).json(medicines);
-        return res.status(200).json({message: "hola"});
+        const {searchName, inBenefitsProgram} = req.query;
+        const query: any = {};
+
+        if (searchName && searchName.trim() !== "") {
+            query.name = { $regex: searchName, $options: 'i' };
+        }
+
+        if (inBenefitsProgram === "true") {
+            query.redeeming_points = { $gt: 0 };
+        } else if (inBenefitsProgram === "false") {
+            query.redeeming_points = 0;
+        }
+
+        const medicines = await Medicine.find(query);
+        res.json(medicines);
     } catch (error: any) {
-        //return res.status(500).json({message: error.message});
-        console.log("error filtrar medicinas" + error.message);
-        return res.status(500).json({message: error.message});
+        res.status(500).json({ message: "Error filtering medicines", error: error.message });
+    }
+
+};
+
+export const updateGivenPoints = async (req: any, res: any) => {
+    const {name, points_given} = req.body;
+    try {
+        const medicine = await Medicine.findOneAndUpdate(
+            {name},
+            {points_given},
+            {new: true}
+        );
+        if (!medicine) {
+            return res.status(404).json({message: "Medicine not Found"});
+        }
+        res.json(medicine);
+    } catch (error: any) {
+        res.status(500).json({message: "Error updating given points", error: error.message});
     }
 };
 
-export const updatePoints = async (req: any, res: any) => {
+export const updateRedeemPoints = async (req: any, res: any) => {
+    const {name, redeeming_points} = req.body;
     try {
-        //update points required
-        //update redeem awarded points
-        console.log("hola update points");
-        return res.status(200).json({message: "hola"});
-
+        const medicine = await Medicine.findOneAndUpdate(
+            {name},
+            {redeeming_points},
+            {new: true}
+        );
+        if (!medicine) {
+            return res.status(404).json({message: "Medicine not Found"});
+        }
+        res.json(medicine);
     } catch (error: any) {
-        //return res.status(500).json({message: error.message});
-        console.log("error update points" + error.message);
-        return res.status(500).json({message: error.message});
+        res.status(500).json({message: "Error updating redeem points", error: error.message});
     }
 };
-
