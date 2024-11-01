@@ -57,7 +57,7 @@ return (
       <img src={Logo} className="w-20 rounded-md shadow-lg py-8"/>
       
       <div className='flex flex-col space-y-[10px] py-[50px]'>
-        {(user && user.rol!="Admin") &&    
+        {(user?.rol!="Admin") &&    
           <Button onClick={() => {navigate('/find-invoice')}}>Buscar Factura</Button>
         }
         {user?.rol == 'Cliente' && (
@@ -65,7 +65,7 @@ return (
             <Button onClick={() => {navigate('/register-invoice')}}>Registrar Factura</Button>
           </div>
         )}
-        {user?.rol == 'Admin' && (
+        {(user?.rol == 'Admin' || user?.rol == "Cliente") && (
           <div>
             <Button onClick={() => {navigate('/medicine')}}>Ver Medicamentos</Button>
           </div>
