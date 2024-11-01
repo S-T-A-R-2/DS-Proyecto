@@ -11,7 +11,7 @@ type UserData = {
 };
 
 type InvoiceData = {
-    number: string;
+    number: number;
     date: string;
     pharmacy: string;
     medicine: string;
@@ -53,3 +53,4 @@ export const updateGivenPoints = (medicine: MedicineData) => axios.put('/updateG
 
 //Pharmacies
 export const getAllPharmacies = () => axios.get('/get-all-pharmacies');
+

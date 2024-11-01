@@ -22,13 +22,13 @@ const invoiceSchema = new Schema({
         type: Number,
         required: true
     },
-    imageId: {
-        type: String,
-        required: true
-    },
     state: {
         type: String,
         required: true
+    },
+    user: {
+      type: String,
+      required: true
     }
 });
 
