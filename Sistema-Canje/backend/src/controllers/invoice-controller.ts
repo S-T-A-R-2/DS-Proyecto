@@ -18,7 +18,7 @@ export const getAllInvoice = async (req: any, res: any) => {
         const invoices = await Invoice.find({});
         res.json(invoices);
     } catch (error: any) {
-        res.status(500).json({ message: "Uyuyui", error: error.message });
+        res.status(500).json({ message: "No se pudo obtener las facturas", error: error.message });
     }
 };
 

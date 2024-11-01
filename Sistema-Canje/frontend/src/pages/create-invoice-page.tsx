@@ -2,13 +2,21 @@ import React, {useEffect, useState} from 'react'
 import { useForm } from 'react-hook-form'
 import {useNavigate, Link} from 'react-router-dom';
 import { useAuth } from '../context/auth-context';
-import {createInvoice} from '../api/auth';
+import {createInvoice, getAllPharmacies, getMedicines } from '../api/auth';
 
 import Button from '../components/Button'
 import Input from '../components/Input';
 import Dropdown from '../components/Dropdown';
 
+
+
 function CreateInvoice() {
+
+    interface DropdownOption {
+        label: string;
+        onClick?: () => void;
+    }
+
     type FormData = {
         number: string;
         date: string;
@@ -31,10 +39,15 @@ function CreateInvoice() {
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-    const [pharmacy, setPharmacy] = useState<string | undefined>(undefined);
+    const [pharmacyV, setPharmacy] = useState<string>("");
     const [isPharmacyMenu, setIsPharmacyMenu] = useState<boolean>(false);
-    
-    let pharmaciesOptions: unknown[] =[];
+    const [loadedPharmacies, setLoadedPharmacies] = useState<boolean>(false);
+    const [pharmacyOptions, setPharmacyOptions] = useState<DropdownOption[]>([]);
+
+    const [medicineV, setMedicine] = useState<string>("");
+    const [isMedicineMenu, setIsMedicineMenu] = useState<boolean>(false);
+    const [loadedMedicines, setLoadedMedicines] = useState<boolean>(false);
+    const [medicineOptions, setMedicineOptions] = useState<DropdownOption[]>([]);
 
     const [base64Image, setBase64Image] = useState<string | undefined>("https://img.icons8.com/fluent-systems-regular/512/FFFFFF/picture.png");
 
@@ -44,9 +57,59 @@ function CreateInvoice() {
     const togglePharmacy = () => {
         setIsPharmacyMenu(!isPharmacyMenu);
     }
+
+    const loadPharmacies = async () => {
+        try {
+            const response = await getAllPharmacies();
+            const options = response.data.map((option: any) => ({
+                label: option.name,
+                onClick: () => {
+                    setPharmacy(option.name);
+                }
+            }));
+            setPharmacyOptions(options);
+            setPharmacy(response.data[0].name);
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+
+
+    const loadMedicines = async () => {
+        try {
+            const response = await getMedicines();
+            const options = response.data.map((option: any) => ({
+                label: option.name,
+                onClick: () => {
+                    setMedicine(option.name);
+                }
+            }));
+            setMedicineOptions(options);
+            setMedicine(response.data[0].name);
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+    
+    const toggleMedicine = () => {
+        setIsMedicineMenu(!isMedicineMenu);
+    }
+
+    useEffect(() => {
+        if (!loadedPharmacies) {
+            loadPharmacies();
+            setLoadedPharmacies(true);
+        }
+        if (!loadedMedicines) {
+            loadMedicines();
+            setLoadedMedicines(true);
+        }
+    }, []);
     
     const onSubmit = handleSubmit(async (data: FormData) => {
-        const {number, date, pharmacy, medicine, quantity, imageL, state} = data;
+        const {number, date, quantity, imageL, state} = data;
+        const medicine: string = medicineV;
+        const pharmacy: string = pharmacyV;
         const file = imageL[0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -67,7 +130,6 @@ function CreateInvoice() {
                 state
             };
             try {
-                console.log(invoiceData);
                 await createInvoice(invoiceData);
             } catch (error: any){
                 console.log(error.message);
@@ -97,21 +159,6 @@ function CreateInvoice() {
     }, [isAuthenticated, navigate]);
 
 
-    // Cambiar para farmacias y medicamentos
-    const [rol, setRol] = useState<string>("Cliente");
-
-    const profileOptions = [
-		{ label: 'Cliente', onClick: () => {setRol('Cliente'); setIsOpenMenu(!isOpenMenu)}},
-        { label: 'Operativo', onClick: () => {setRol('Operativo'); setIsOpenMenu(!isOpenMenu)} },
-        { label: 'Admin', onClick: () => {setRol('Admin'); setIsOpenMenu(!isOpenMenu)} },
-	];
-
-    const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-    const toggleMenu = () => {
-		setIsOpenMenu(!isOpenMenu);
-	};
-
-
     return (
     <div className="ytd-rich-grid-renderer h-screen  justify-center">
         <h1 className="text-2xl font-bold text-white">Iniciar Sesión</h1>
@@ -132,7 +179,7 @@ function CreateInvoice() {
                     </label>
                     <Input 
                         id="inputFactura"
-                        type="text"
+                        type="number"
                         {...register("number", { required: true })}
                         placeholder="Ingrese el número de factura ..."
                     />
@@ -163,22 +210,15 @@ function CreateInvoice() {
                     </label>
                     
                     <Dropdown
-                        buttonText={rol}
-                        action={toggleMenu} 
-                        isActive={isOpenMenu} 
-                        options={profileOptions}
+                        buttonText={pharmacyV}
+                        action={togglePharmacy} 
+                        isActive={isPharmacyMenu} 
+                        options={pharmacyOptions}
                         showHeader={true}
-                    />
-
-                    <Input 
-                        id="inputFarmacia"
-                        type="text"
-                        {...register("pharmacy", { required: true })}
-                        placeholder="Ingrese ..."
                     />
                     
 
-                    {/*errors.*/  (
+                    {errors.pharmacy &&  (
                         <p className="text-red-500">Debe ingresar una farmacia</p>
                     )}
                 </div>
@@ -188,10 +228,12 @@ function CreateInvoice() {
                         Agregar Medicamento
                     </label>
 
-                    <Input 
-                        id='inputMedicamento'
-                        type="text"
-                        {...register("medicine", { required: true })}
+                    <Dropdown
+                        buttonText={medicineV}
+                        action={toggleMedicine} 
+                        isActive={isMedicineMenu} 
+                        options={medicineOptions}
+                        showHeader={true}
                     />
                     <Input 
                         id='inputCantidad'

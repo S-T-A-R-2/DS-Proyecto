@@ -49,3 +49,7 @@ export const filterMedicines = (searchName: any, inBenefitsProgram: any) => axio
 });
 export const updateRedeemPoints = (medicine: MedicineData) => axios.put('/updateRedeem', medicine);
 export const updateGivenPoints = (medicine: MedicineData) => axios.put('/updateGiven', medicine);
+
+
+//Pharmacies
+export const getAllPharmacies = () => axios.get('/get-all-pharmacies');
