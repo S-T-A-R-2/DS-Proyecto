@@ -38,9 +38,10 @@ export const createInvoice = (invoice : InvoiceData) => {
 }
 
 export const getAllInvoices = () => axios.get('/get-all-invoice'); 
-export const filterInvoices = (stateFilter:any, dateRangeFilter:any, searchInvoiceNumber:any) => axios.get('/filter-invoices', {
-  params:{stateFilter, dateRangeFilter, searchInvoiceNumber}
+export const filterInvoices = (stateFilter:any, dateRangeFilter:any, searchInvoiceNumber:any, userFilter: any) => axios.get('/filter-invoices', {
+  params:{stateFilter, dateRangeFilter, searchInvoiceNumber, userFilter}
 });
+export const setInvoiceState = (update:{number:string, state:string}) => axios.post('/set-invoice-state', update)
 
 //Medicines
 export const getMedicines = () => {return axios.get('/getmedicines');};

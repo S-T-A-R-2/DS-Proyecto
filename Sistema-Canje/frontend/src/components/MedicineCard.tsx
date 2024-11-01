@@ -16,6 +16,7 @@ interface Medicine {
 interface MedicineCardProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof medicineCardVariants> {
     medicine: Medicine;
     reloadMedicines: () => void;
+    user:any;
 }  
 
 const medicineCardVariants = cva('border border-zinc-700 rounded-lg p-4 shadow-sm bg-zinc-800 text-white', {
@@ -36,7 +37,7 @@ const medicineCardVariants = cva('border border-zinc-700 rounded-lg p-4 shadow-s
     },
   });
 
-export default function MedicineCard({ medicine, reloadMedicines, className, variant, size, ...props }: MedicineCardProps) {
+export default function MedicineCard({ medicine, reloadMedicines, className, variant, size, user, ...props }: MedicineCardProps) {
     const [pointsAwardedInput, setPointsAwardedInput] = React.useState('');
     const [pointsRequiredInput, setPointsRequiredInput] = React.useState('');
     const [error, setError] = useState<string | null>(null);
@@ -84,30 +85,33 @@ export default function MedicineCard({ medicine, reloadMedicines, className, var
             <span className="text-zinc-400">Puntos Requeridos para Canjear:</span>
             <span className="text-cyan-400">{medicine.redeeming_points} pts</span>
           </div>
-          <div className="flex items-center gap-2 pt-2">
-            <Input
-              placeholder="Actualizar Puntos Otorgados"
-              variant="primary"
-              className="max-w-[230px]"
-              value={pointsAwardedInput}
-              onChange={(e) => setPointsAwardedInput(e.target.value)}
-            />
-            <Button variant="primary" onClick={() => handleUpdateClick(pointsAwardedInput, updateGivenPoints, 'points_given')}>
-              Actualizar
-            </Button>
-          </div>
-          <div className="flex items-center gap-2 pt-2">
-            <Input
-              placeholder="Actualizar Puntos para Canjear"
-              variant="primary"
-              className="max-w-[230px]"
-              value={pointsRequiredInput}
-              onChange={(e) => setPointsRequiredInput(e.target.value)}
-            />
-            <Button variant="primary" onClick={() => handleUpdateClick(pointsRequiredInput, updateRedeemPoints, 'redeeming_points')}>
-              Actualizar
-            </Button>
-          </div>
+
+          { user?.rol == "Admin" && (<div>
+            <div className="flex items-center gap-2 pt-2">
+              <Input
+                placeholder="Actualizar Puntos Otorgados"
+                variant="primary"
+                className="max-w-[230px]"
+                value={pointsAwardedInput}
+                onChange={(e) => setPointsAwardedInput(e.target.value)}
+              />
+              <Button variant="primary" onClick={() => handleUpdateClick(pointsAwardedInput, updateGivenPoints, 'points_given')}>
+                Actualizar
+              </Button>
+            </div>
+            <div className="flex items-center gap-2 pt-2">
+              <Input
+                placeholder="Actualizar Puntos para Canjear"
+                variant="primary"
+                className="max-w-[230px]"
+                value={pointsRequiredInput}
+                onChange={(e) => setPointsRequiredInput(e.target.value)}
+              />
+              <Button variant="primary" onClick={() => handleUpdateClick(pointsRequiredInput, updateRedeemPoints, 'redeeming_points')}>
+                Actualizar
+              </Button>
+            </div>
+          </div>)}
            {error && <div className="text-red-500 text-sm">{error}</div>}
         </div>
       </div>
