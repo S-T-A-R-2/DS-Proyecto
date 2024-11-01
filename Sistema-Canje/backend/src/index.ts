@@ -8,6 +8,8 @@ import invoiceRoutes from './routes/invoice-route'
 
 import medicineRoutes from './routes/medicine-route'
 
+import pharmacyRoutes from './routes/pharmacy-route'
+
 import cors from 'cors';
 import {connectDB} from './db'
 
@@ -28,6 +30,7 @@ app.use(cookieParser());
 app.use("/api", authRoutes);
 app.use("/api", invoiceRoutes)
 app.use("/api", medicineRoutes);
+app.use("/api", pharmacyRoutes)
 
 app.listen(5000);
 

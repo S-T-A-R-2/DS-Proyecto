@@ -1,12 +1,33 @@
 import Invoice from '../models/invoice-model';
+import Image from '../models/image-model';
 import { Request, Response } from 'express';
 import mongoose, {model, Document, Schema} from 'mongoose'
 
 export const createInvoice = async (req: any, res: any) => {
     try {
-        
-        console.log("no fallo");
-        return res.status(201).json({nombre:"prueba"});
+        const {username, number, date, pharmacy, medicine, quantity, image, state} = req.body;
+        const imageId = number+username;
+        const pharmacyId = pharmacy;
+        const medicineId = medicine;
+        const user = username;
+        const newInvoice = new Invoice({
+          number,
+          date,
+          pharmacyId,
+          medicineId,
+          quantity,
+          state,
+          user
+        })
+        const idInvoice = newInvoice._id.toHexString();
+        const data = image;
+        const newImage = new Image({
+          idInvoice,
+          data
+        })
+        await newInvoice.save();
+        await newImage.save();
+        return res.status(201).json({nombre:"Creacion de factura exitosa"});
     } catch (error: any) {
         console.log("fallo" +error.message);
     }
@@ -17,7 +38,7 @@ export const getAllInvoice = async (req: any, res: any) => {
         const invoices = await Invoice.find({});
         res.json(invoices);
     } catch (error: any) {
-        res.status(500).json({ message: "Uyuyui", error: error.message });
+        res.status(500).json({ message: "No se pudo obtener las facturas", error: error.message });
     }
 };
 
