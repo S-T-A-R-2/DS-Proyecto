@@ -3,7 +3,6 @@ import Image from '../models/image-model';
 import { Request, Response } from 'express';
 import mongoose, {model, Document, Schema} from 'mongoose'
 
-
 export const createInvoice = async (req: any, res: any) => {
     try {
         const {username, number, date, pharmacy, medicine, quantity, image, state} = req.body;
@@ -43,10 +42,28 @@ export const getAllInvoice = async (req: any, res: any) => {
     }
 };
 
+export const setInvoiceState= async (req: any, res: any) => {
+      try{
+        const update = req.body;
+        const newInvoice = await Invoice.findOneAndUpdate(
+          { number: update.number },
+          { $set: { state:update.state } },
+          { new: true}
+        );
+        console.log(newInvoice);
+      } catch (error:any) {
+        res.status(500).json({message:"Uyuyuyyui", error:error.message});
+      }
+}
+
 export const filterInvoices= async (req: any, res: any) => {
   try {
-    const {stateFilter, dateRangeFilter, searchInvoiceNumber} = req.query;
+    const {stateFilter, dateRangeFilter, searchInvoiceNumber, userFilter} = req.query;
     const query: any = {};
+
+    if (userFilter && userFilter.trim() !== ""){
+      query.user = userFilter;
+    }
 
     if (searchInvoiceNumber && searchInvoiceNumber.trim() !== "") {
       const invoiceNumber = Number(searchInvoiceNumber);

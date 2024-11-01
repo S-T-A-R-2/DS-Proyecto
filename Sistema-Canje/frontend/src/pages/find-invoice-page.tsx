@@ -21,6 +21,7 @@ export const FindInvoicePage = () => {
     quantity: number;
     imageId: string;
     state: string;
+    user: string;
   }
   const [stateFilter, setStateFilter] = useState({
         Aprobada: true,
@@ -30,6 +31,7 @@ export const FindInvoicePage = () => {
   const [dateRangeFilter, setDateRangeFilter] = useState<{ start?: string; end?: string } | null>(null);
   const [invoicesF, setInvoices] = useState<InvoiceData[]|null>(null);
   const [searchInvoiceNumber, setSearchInvoiceNumber] = useState<string>("");
+  const [userFilter, setUserFilter] = useState<string>("");
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -42,21 +44,23 @@ export const FindInvoicePage = () => {
 
   useEffect(()  => {
     const getAllInvoicesAux = async () => {
-      const resp = await getAllInvoices();
-      setInvoices(resp.data);
+      if (user && user.rol == "Operativo"){
+        const resp = await getAllInvoices();
+        setInvoices(resp.data);
+      } else if (user) {
+        const resp = await filterInvoices(stateFilter, dateRangeFilter, searchInvoiceNumber, user.username);
+        setUserFilter(user.username);
+        setInvoices(resp.data);
+      }
     }
     if (loadInvoices){
       getAllInvoicesAux();
       setLoadInvoices(!loadInvoices);
     }
   }, [username])
-   
-  useEffect(() => {
-    console.log(invoicesF);
-  }, [invoicesF])
-  
+    
   const handleSearch = async () => {
-      const resp = await filterInvoices(stateFilter, dateRangeFilter, searchInvoiceNumber);
+      const resp = await filterInvoices(stateFilter, dateRangeFilter, searchInvoiceNumber, userFilter);
       setInvoices(resp.data);
   }
 
@@ -86,6 +90,10 @@ export const FindInvoicePage = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchInvoiceNumber(e.target.value);
   };
+  const handleUserFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserFilter(e.target.value);
+  };
+
 
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const toggleMenu = () => {
@@ -161,6 +169,16 @@ return (
                     onChange={(e) => setDateRangeFilter(prev => ({ ...prev, end: e.target.value }))}
             />
           </div>
+          { user?.rol == "Operativo" && (
+            <div className="flex flex-col space-y-2">
+              <h2>Filtrar por Nombre de Usuario</h2> 
+              <input  type="text" 
+                placeholder="Nombre de Usuario" 
+                className="bg-white p-2 rounded w-full text-gray-800"
+                onChange={handleUserFilter}
+              /> 
+            </div>
+          )}
         </div>
         {/*Muestra facturas*/}
         <div className="text-left ml-4 p-4 flex flex-col space-y-2 space-x-2 w-3/4">

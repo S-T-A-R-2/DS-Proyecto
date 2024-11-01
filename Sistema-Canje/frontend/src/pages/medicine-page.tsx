@@ -3,6 +3,7 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import MedicineCard from '../components/MedicineCard';
 import { getMedicines, filterMedicines } from '../api/auth';
+import { useAuth } from '../context/auth-context';
 
 interface Medicine {
   name: string;
@@ -17,7 +18,7 @@ const MedicinePage = () => {
   const [loadMedicines, setLoadMedicines] = useState<boolean>(true);
   const [searchText, setSearchText] = useState('');
   const [isInProgram, setIsInProgram] = useState(true);
-
+	const { user } = useAuth();
   const loadMedicinesList = async () => {
     if (loadMedicines) {
       const resp = await getMedicines();
@@ -88,6 +89,7 @@ const MedicinePage = () => {
                 key={medicine.name}
                 medicine={medicine}
                 reloadMedicines={loadMedicinesList}
+                user={user}
               />
             ))
           ) : (

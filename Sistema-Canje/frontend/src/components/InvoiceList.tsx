@@ -11,6 +11,7 @@ interface Invoice {
     quantity: number;
     imageId: string;
     state: string;
+    user: string;
 }
 
 interface InvoiceListProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof invoiceListVariants> {
@@ -25,7 +26,7 @@ export default function InvoiceList({
     variant, 
     size, 
     invoices,
-    onclick, 
+    onclick,
     ...props 
 }: InvoiceListProps) {
     return (
@@ -46,6 +47,7 @@ export default function InvoiceList({
                         <p className="text-black">Factura {invoice.number}</p>
                         <p>Fecha: {invoice.date}</p> 
                         <p>Estado: {invoice.state}</p>
+                        <p>Usuario: {invoice.user}</p>
                       </div>
                     </li>
                 ))}
