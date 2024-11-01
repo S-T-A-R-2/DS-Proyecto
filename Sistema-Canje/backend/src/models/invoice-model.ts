@@ -29,6 +29,10 @@ const invoiceSchema = new Schema({
     state: {
         type: String,
         required: true
+    },
+    user: {
+      type: String,
+      required: true
     }
 });
 
