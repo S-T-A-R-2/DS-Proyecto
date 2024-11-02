@@ -20,7 +20,7 @@ function RegisterPage() {
         password: string;
     };
     
-    const { signUp, isAuthenticated, errors: registerErrors } = useAuth();
+    const { signUp, isAuthenticated, errors: registerErrors, user } = useAuth();
     const navigate = useNavigate();
 
     const onSubmit = handleSubmit( async (values : FormData) => {
@@ -123,6 +123,7 @@ function RegisterPage() {
                 )}
             </div>
             
+            {( user && user.rol == "Admin" &&
             <div>
                 <label
                     className={labelStyle}>
@@ -140,6 +141,7 @@ function RegisterPage() {
                     <p className="text-red-500">Password is required</p>
                 )}
             </div>
+            )}
             </div>
 
             <div className='flex flex-row space-x-[60px] items-center px-[28px]'>

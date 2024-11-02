@@ -13,8 +13,8 @@ function SeeInvoice() {
     type InvoiceData = {
         number: string;
         date: string;
-        pharmacy: string;
-        medicine: string;
+        pharmacyId: string;
+        medicineId: string;
         quantity: number;
         image: string;
         state: string;
@@ -40,6 +40,7 @@ function SeeInvoice() {
     }
     
     const invoice:InvoiceData|null = JSON.parse(localStorage.getItem('invoice') || '""');
+    console.log(invoice);
     const [imageFlag, setImageFlag] = useState<boolean>(false);
     useEffect(() => {
       const setImage = async (image:string) => {
@@ -115,7 +116,7 @@ function SeeInvoice() {
               <div className="min-w-[150px] p-2">
                 <h2 className="text-xl font-semibold">Farmacia</h2>
                 {invoice?(
-                  <p className="text-lg">{invoice.pharmacy}</p>
+                  <p className="text-lg">{invoice.pharmacyId}</p>
                   ) : (
                   <p className="text-lg">Cargando Farmacia...</p>    
                 )}                    
@@ -123,7 +124,7 @@ function SeeInvoice() {
               <div className="min-w-[150px] p-2">
                 <h2 className="text-xl font-semibold">Medicamento</h2>
                   {invoice?(
-                  <p className="text-lg">{invoice.medicine} - {invoice.quantity} unidades</p>
+                  <p className="text-lg">{invoice.medicineId} - {invoice.quantity} unidades</p>
                   ) : (
                   <p className="text-lg">Cargando Medicina...</p>    
                 )}                    

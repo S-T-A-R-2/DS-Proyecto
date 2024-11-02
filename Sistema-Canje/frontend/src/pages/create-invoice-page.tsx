@@ -163,7 +163,8 @@ function CreateInvoice() {
                 };
                 try {
                     console.log(invoiceData);
-                    await createInvoice(invoiceData);
+                    createInvoice(invoiceData);
+                    navigate('/main');
                 } catch (error: any){
                     console.log(error.message);
                 }
