@@ -2,7 +2,22 @@ import Invoice from '../models/invoice-model';
 import Image from '../models/image-model';
 import { Request, Response } from 'express';
 import mongoose, {model, Document, Schema} from 'mongoose'
+import {InvoiceClass} from '../classes/Invoice'
 
+let invoicesArray: Array<InvoiceClass> = new Array();
+
+export const getImage = async (req: any, res: any) => {
+  try {
+    let idInvoice = req.query.number;
+    idInvoice = idInvoice
+    const dataImage = await Image.findOne(
+      {idInvoice}
+    )
+    res.json(dataImage);
+  } catch (error: any) {
+    res.status(500).json({ message: "No se pudo obtener la imagen", error: error.message });
+  }
+}
 
 export const createInvoice = async (req: any, res: any) => {
     try {
@@ -11,6 +26,13 @@ export const createInvoice = async (req: any, res: any) => {
         const pharmacyId = pharmacy;
         const medicineId = medicine;
         const user = username;
+
+        const check = await Invoice.findOne(
+          {number}
+        )
+        if (check != null) {
+          return res.status(409).json({nombre:"El objeto ya existe"});
+        }
         const newInvoice = new Invoice({
           number,
           date,
@@ -20,7 +42,9 @@ export const createInvoice = async (req: any, res: any) => {
           state,
           user
         })
-        const idInvoice = newInvoice._id.toHexString();
+        const invoiceObject = new InvoiceClass(number, date, pharmacyId, medicineId, quantity, state, user);
+        invoicesArray.push(invoiceObject);
+        const idInvoice = number;
         const data = image;
         const newImage = new Image({
           idInvoice,
@@ -28,16 +52,26 @@ export const createInvoice = async (req: any, res: any) => {
         })
         await newInvoice.save();
         await newImage.save();
+        
         return res.status(201).json({nombre:"Creacion de factura exitosa"});
     } catch (error: any) {
-        console.log("fallo" +error.message);
+      res.status(500).json({ message: "No se pudo crear la factura", error: error.message });
     }
 };
 
 export const getAllInvoice = async (req: any, res: any) => {
+
     try {
-        const invoices = await Invoice.find({});
-        res.json(invoices);
+        if (invoicesArray.length == 0) {
+          const invoices = await Invoice.find({});
+          for (let i in invoices) {
+            const invoiceObject = new InvoiceClass(invoices[i].number, invoices[i].date, invoices[i].pharmacyId, invoices[i].medicineId, invoices[i].quantity, invoices[i].state, invoices[i].user);
+            invoicesArray.push(invoiceObject);
+          }
+          res.json(invoices);
+        } else {
+          res.json(invoicesArray);
+        }
     } catch (error: any) {
         res.status(500).json({ message: "No se pudo obtener las facturas", error: error.message });
     }

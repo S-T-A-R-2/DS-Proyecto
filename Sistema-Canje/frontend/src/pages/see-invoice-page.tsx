@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { useForm } from 'react-hook-form'
 import {useNavigate, Link} from 'react-router-dom';
 import { useAuth } from '../context/auth-context';
-import {createInvoice} from '../api/auth';
+import {createInvoice, getImage} from '../api/auth';
 
 import Button from '../components/Button'
 import Input from '../components/Input';
@@ -12,10 +12,10 @@ function SeeInvoice() {
 	  const { isAuthenticated, logout, user } = useAuth();
     console.log(user);
     type InvoiceData = {
-        number: string;
+        number: number;
         date: string;
-        pharmacy: string;
-        medicine: string;
+        pharmacyId: string;
+        medicineId: string;
         quantity: number;
         image: string;
         state: string;
@@ -42,14 +42,27 @@ function SeeInvoice() {
     const invoice:InvoiceData|null = JSON.parse(localStorage.getItem('invoice') || '""');
     const [imageFlag, setImageFlag] = useState<boolean>(false);
     useEffect(() => {
+      
+      loadImage();
+      
+    }, [])
+
+    const loadImage = async () => {
+      
       const setImage = async (image:string) => {
         setBase64Image(image);
       }
       if (!imageFlag && invoice){
-        setImage(invoice.image);
-        setImageFlag(true);
+        try {
+          const imageData = await getImage(invoice.number);
+          console.log(imageData);
+          setImage(imageData.data.data);
+          setImageFlag(true);
+        } catch (error:any){
+          console.log(error.message);
+        }
       }
-    }, [])
+    }
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -103,7 +116,7 @@ function SeeInvoice() {
               <div className="min-w-[150px] p-2">
                 <h2 className="text-xl font-semibold">Farmacia</h2>
                 {invoice?(
-                  <p className="text-lg">{invoice.pharmacy}</p>
+                  <p className="text-lg">{invoice.pharmacyId}</p>
                   ) : (
                   <p className="text-lg">Cargando Farmacia...</p>    
                 )}                    
@@ -111,7 +124,7 @@ function SeeInvoice() {
               <div className="min-w-[150px] p-2">
                 <h2 className="text-xl font-semibold">Medicamento</h2>
                   {invoice?(
-                  <p className="text-lg">{invoice.medicine} - {invoice.quantity} unidades</p>
+                  <p className="text-lg">{invoice.medicineId} - {invoice.quantity} unidades</p>
                   ) : (
                   <p className="text-lg">Cargando Medicina...</p>    
                 )}                    

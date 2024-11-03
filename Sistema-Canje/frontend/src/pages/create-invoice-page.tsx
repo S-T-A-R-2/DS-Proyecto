@@ -162,10 +162,15 @@ function CreateInvoice() {
                     state
                 };
                 try {
-                    console.log(invoiceData);
-                    await createInvoice(invoiceData);
+                    const response = await createInvoice(invoiceData);
+                    if (response.status == 409) {
+                        alert("La factura ya está ingresada");
+                    }
                 } catch (error: any){
                     console.log(error.message);
+                    if (error.status == 409) {
+                        alert("La factura ya está ingresada");
+                    }
                 }
             };
         }

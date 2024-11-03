@@ -41,6 +41,8 @@ export const getAllInvoices = () => axios.get('/get-all-invoice');
 export const filterInvoices = (stateFilter:any, dateRangeFilter:any, searchInvoiceNumber:any) => axios.get('/filter-invoices', {
   params:{stateFilter, dateRangeFilter, searchInvoiceNumber}
 });
+export const getImage = (number: any) => axios.get('/getImage', {params: {number}});
+
 
 //Medicines
 export const getMedicines = () => {return axios.get('/getmedicines');};

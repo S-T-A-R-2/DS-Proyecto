@@ -15,7 +15,6 @@ export const MainPage = () => {
       if (isAuthenticated && user) {
         setUsername(user.username);
         setPassword(user.password);
-        console.log(user?.username)
       }
     }, [isAuthenticated, user]);
 
@@ -63,7 +62,7 @@ return (
         }
         {user?.rol == 'Cliente' && (
           <div>
-            <Button onClick={() => {navigate('/register-invoice', {state: {username: user.username}})}}>Registrar Factura</Button>
+            <Button onClick={() => {navigate('/register-invoice', {state: {user: user}})}}>Registrar Factura</Button>
           </div>
         )}
         {user?.rol == 'Admin' && (
