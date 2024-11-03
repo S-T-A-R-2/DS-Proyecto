@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { useForm } from 'react-hook-form'
 import {useNavigate, Link} from 'react-router-dom';
 import { useAuth } from '../context/auth-context';
-import {createInvoice, getImage} from '../api/auth';
+import {createInvoice, setInvoiceState, getImage} from '../api/auth';
 
 import Button from '../components/Button'
 import Input from '../components/Input';
@@ -10,7 +10,6 @@ import Dropdown from '../components/Dropdown';
 
 function SeeInvoice() {
 	  const { isAuthenticated, logout, user } = useAuth();
-    console.log(user);
     type InvoiceData = {
         number: number;
         date: string;
@@ -19,6 +18,7 @@ function SeeInvoice() {
         quantity: number;
         image: string;
         state: string;
+        user: string;
     };
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
@@ -75,19 +75,31 @@ function SeeInvoice() {
     const [rol, setRol] = useState<string>("Cliente");
 
     const profileOptions = [
-		{ label: 'Cliente', onClick: () => {setRol('Cliente'); setIsOpenMenu(!isOpenMenu)}},
+		    { label: 'Cliente', onClick: () => {setRol('Cliente'); setIsOpenMenu(!isOpenMenu)}},
         { label: 'Operativo', onClick: () => {setRol('Operativo'); setIsOpenMenu(!isOpenMenu)} },
         { label: 'Admin', onClick: () => {setRol('Admin'); setIsOpenMenu(!isOpenMenu)} },
-	];
+	  ];
 
     const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
     const toggleMenu = () => {
 		  setIsOpenMenu(!isOpenMenu);
 	  };
-    
-    
 
-    return (
+    const handleAceptar = ()=>{
+      if (invoice) {
+        setInvoiceState({number:invoice.number, state:"Aprobada"});
+        navigate("/main");
+      }
+    };
+    
+    const handleRechazar = ()=>{
+      if (invoice) {
+        setInvoiceState({number:invoice.number, state:"Rechazada"});
+        navigate("/main");
+      }
+    };
+    
+  return (
     <div className="ytd-rich-grid-renderer h-screen  justify-center text-white">
         <h1 className="text-4xl font-bold text-white p-2">Ver Factura</h1>
         
@@ -140,15 +152,23 @@ function SeeInvoice() {
                   <p className="text-lg">Cargando Estado...</p>    
                 )}                    
               </div>
+              <div className="min-w-[150px] p-2">
+                <h2 className="text-xl font-semibold">Cliente</h2>
+                {invoice?(
+                  <p className="text-lg">{invoice.user}</p>
+                  ) : (
+                  <p className="text-lg">Cargando Cliente...</p>    
+                )}                    
+              </div>
             </div>
             <div className="flex flex-row justify-center items-center">
               <img src={base64Image} width = "350"/>
             </div>
         </div>
           {(invoice && invoice.state=="EnEspera" && user && user.rol=="Operativo") && (
-            <div>        
-              <Button>Aceptar</Button>
-              <Button>Rechazar</Button>
+            <div className="p-2 justify-center flex flex-row">        
+              <Button onClick={handleAceptar}> Aprobar</Button>
+              <Button onClick={handleRechazar}>Rechazar</Button>
             </div>
           )}
           <div className="absolute bottom-4 right-4">

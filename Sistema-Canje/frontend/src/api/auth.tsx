@@ -38,11 +38,12 @@ export const createInvoice = (invoice : InvoiceData) => {
 }
 
 export const getAllInvoices = () => axios.get('/get-all-invoice'); 
-export const filterInvoices = (stateFilter:any, dateRangeFilter:any, searchInvoiceNumber:any) => axios.get('/filter-invoices', {
-  params:{stateFilter, dateRangeFilter, searchInvoiceNumber}
+export const filterInvoices = (stateFilter:any, dateRangeFilter:any, searchInvoiceNumber:any, userFilter: any) => axios.get('/filter-invoices', {
+  params:{stateFilter, dateRangeFilter, searchInvoiceNumber, userFilter}
 });
 export const getImage = (number: any) => axios.get('/getImage', {params: {number}});
 
+export const setInvoiceState = (update:{number:number, state:string}) => axios.post('/set-invoice-state', update)
 
 //Medicines
 export const getMedicines = () => {return axios.get('/getmedicines');};
@@ -51,8 +52,5 @@ export const filterMedicines = (searchName: any, inBenefitsProgram: any) => axio
 });
 export const updateRedeemPoints = (medicine: MedicineData) => axios.put('/updateRedeem', medicine);
 export const updateGivenPoints = (medicine: MedicineData) => axios.put('/updateGiven', medicine);
-
-
-//Pharmacies
 export const getAllPharmacies = () => axios.get('/get-all-pharmacies');
 
