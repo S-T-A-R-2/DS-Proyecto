@@ -90,7 +90,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
     // Clear errors after 5 seconds
     useEffect(() => {
-        if (errors.length > 0) {
+        if (errors && errors.length > 0) {
             const timer = setTimeout(() => {
                 setErrors([]);
             }, 5000)

@@ -1,16 +1,63 @@
 import { Router, Request, Response } from 'express';
+import { createAccessToken } from '../libs/jwt';
+import UserController from '../controllers/auth-controller';
+import jwt from 'jsonwebtoken';
 //import {authRequired} from '../middlewares/validateToken.js';
-import {register, login, verifyToken} from '../controllers/auth-controller'
- 
 const router = Router();
+const userController = UserController.getInstance();
+
+export const verifyToken = async (req: any, res: any) => {
+    const { token } = req.cookies;
+    if (!token) {
+        return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+
+    jwt.verify(token, "TOKEN_SECRET", async (err: any, decoded: any) => {
+        if (err) return res.status(403).json({ message: "authorization denied" });
+        const { username } = decoded;
+
+        const user = await userController.exists(username);
+        if (!user) {
+            return res.status(404).json({messages: ['User not found']});
+        }
+        return res.json(user);
+
+    });
+};
 
 // CRUD
-router.post('/register', register);
-router.post('/login', login);
+router.post('/register', async (req, res) => {
+    try {
+        const newUser = await userController.createUser(
+            req.body.username, req.body.name, req.body.phone,
+            req.body.email, req.body.password, req.body.rol
+        )
+        const token = await createAccessToken({ id: newUser.username, username: newUser.username });
+        res.cookie('token', token, {
+            sameSite: 'none',
+            secure: true,
+            httpOnly: false
+        });
+        res.status(201).json(newUser);
+    } catch (error: any) {
+        res.status(400).json({ error: error.message });
+    }
+});
+router.post('/login', async (req, res) => {
+    try {
+        const user = await userController.getUser(req.body.username, req.body.password);
+        const token = await createAccessToken({ id: user.username, username: user.username });
+        res.cookie('token', token, {
+            sameSite: 'none',
+            secure: true,
+            httpOnly: false
+        });
+        res.status(201).json(user);
+    } catch (error: any) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
 router.get('/verify', verifyToken);
 
-/*router.post('/logout', logout);
-//router.get('/profile', authRequired, profile);
-router.get('/verify', verifyToken);
-*/
 export default router;
