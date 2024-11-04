@@ -166,6 +166,7 @@ function CreateInvoice() {
                     if (response.status == 409) {
                         alert("La factura ya está ingresada");
                     }
+                    navigate("/main");
                 } catch (error: any){
                     console.log(error.message);
                     if (error.status == 409) {

@@ -40,13 +40,14 @@ router.post('/register', async (req, res) => {
         });
         res.status(201).json(newUser);
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 });
 router.post('/login', async (req, res) => {
     try {
         const user = await userController.getUser(req.body.username, req.body.password);
-        const token = await createAccessToken({ id: user.username, username: user.username });
+        //const token = await createAccessToken({ id: user.username, username: user.username });
+        const token = await createAccessToken({ id: req.body.username, username: req.body.username });
         res.cookie('token', token, {
             sameSite: 'none',
             secure: true,
@@ -54,7 +55,7 @@ router.post('/login', async (req, res) => {
         });
         res.status(201).json(user);
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 });
 
