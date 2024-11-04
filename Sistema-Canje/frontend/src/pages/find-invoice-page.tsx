@@ -2,15 +2,11 @@ import React, {useState, useEffect, useInsertionEffect} from 'react'
 import Button from '../components/Button';
 import InvoiceList from '../components/InvoiceList';
 import { useAuth } from '../context/auth-context';
-import {useNavigate, useLocation} from 'react-router-dom'
-import Logo from '../images/logo-main.png'
-import Dropdown from '../components/Dropdown';
+import {useNavigate} from 'react-router-dom'
 import {getAllInvoices, filterInvoices} from '../api/auth';
-
 
 export const FindInvoicePage = () => {
 	const [username, setUsername] = useState<string | null>(null);
-	const [password, setPassword] = useState<string | null>(null);
 	const { isAuthenticated, logout, user } = useAuth();
 	const navigate = useNavigate();
   type InvoiceData = {
@@ -36,7 +32,6 @@ export const FindInvoicePage = () => {
   useEffect(() => {
     if (isAuthenticated && user) {
       setUsername(user.username);
-      setPassword(user.password);
     }
   }, [isAuthenticated, user]);
 
@@ -94,33 +89,9 @@ export const FindInvoicePage = () => {
         setUserFilter(e.target.value);
   };
 
-
-  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-  const toggleMenu = () => {
-		setIsOpenMenu(!isOpenMenu);
-	};
-
 return (
 	<div className='text-white bg-zinc-900 flex flex-col m-auto h-screen'>
-		<div className='flex flex-row justify-end items-start p-4'>
-      <div className='flex flex-col w-[150px] text-center'>
-        <p>{user?.username}</p>
-        <p>{user?.rol}</p>
-        {username && (
-          <div className='flex flex-col'>
-            <Dropdown
-              buttonText="Opciones" 
-              action={toggleMenu} 
-              isActive={isOpenMenu} 
-              options={profileOptions}
-              showHeader={true}
-            />
-          </div>
-        )}
-      </div>
-    </div>
-    
-    <div className="h-full">
+		<div className="h-full">
       <h1 className="text-left text-5xl inline">Facturas</h1>
       <div className="flex text-2xl p-4 w-full h-4/5">
         {/*Filtra facturas*/}

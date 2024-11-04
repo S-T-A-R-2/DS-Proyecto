@@ -1,15 +1,12 @@
-import React, {useEffect, useState} from 'react'
-import { useForm } from 'react-hook-form'
-import {useNavigate, Link} from 'react-router-dom';
+import {useEffect, useState} from 'react'
+import {useNavigate} from 'react-router-dom';
 import { useAuth } from '../context/auth-context';
-import {createInvoice, setInvoiceState, getImage} from '../api/auth';
+import {setInvoiceState, getImage} from '../api/auth';
 
 import Button from '../components/Button'
-import Input from '../components/Input';
-import Dropdown from '../components/Dropdown';
 
 function SeeInvoice() {
-	  const { isAuthenticated, logout, user } = useAuth();
+	  const { isAuthenticated, user } = useAuth();
     type InvoiceData = {
         number: number;
         date: string;
@@ -21,34 +18,14 @@ function SeeInvoice() {
         user: string;
     };
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
-
     const [base64Image, setBase64Image] = useState<string | undefined>("https://img.icons8.com/fluent-systems-regular/512/FFFFFF/picture.png");
-
     const navigate = useNavigate();
-
-    const changeImage = async (image: FileList) => {
-        const file = image[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            if (typeof reader.result === "string") {
-                const base64String = reader.result;
-                setBase64Image(base64String); 
-            }
-        };
-    }
     
     const invoice:InvoiceData|null = JSON.parse(localStorage.getItem('invoice') || '""');
     const [imageFlag, setImageFlag] = useState<boolean>(false);
-    useEffect(() => {
-      
-      loadImage();
-      
-    }, [])
+    
 
     const loadImage = async () => {
-      
       const setImage = async (image:string) => {
         setBase64Image(image);
       }
@@ -65,25 +42,14 @@ function SeeInvoice() {
     }
 
     useEffect(() => {
+      loadImage();
+    }, [])
+
+    useEffect(() => {
         if (!isAuthenticated) {
             navigate("/");
         }
     }, [isAuthenticated, navigate]);
-    
-    
-    // Cambiar para farmacias y medicamentos
-    const [rol, setRol] = useState<string>("Cliente");
-
-    const profileOptions = [
-		    { label: 'Cliente', onClick: () => {setRol('Cliente'); setIsOpenMenu(!isOpenMenu)}},
-        { label: 'Operativo', onClick: () => {setRol('Operativo'); setIsOpenMenu(!isOpenMenu)} },
-        { label: 'Admin', onClick: () => {setRol('Admin'); setIsOpenMenu(!isOpenMenu)} },
-	  ];
-
-    const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-    const toggleMenu = () => {
-		  setIsOpenMenu(!isOpenMenu);
-	  };
 
     const handleAceptar = ()=>{
       if (invoice) {
