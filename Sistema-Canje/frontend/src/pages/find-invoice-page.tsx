@@ -58,17 +58,7 @@ export const FindInvoicePage = () => {
       const resp = await filterInvoices(stateFilter, dateRangeFilter, searchInvoiceNumber, userFilter);
       setInvoices(resp.data);
   }
-
-	const handleLogout = () => {
-		logout();
-		window.location.reload();
-	};
-
-  const profileOptions = [
-		{ label: 'Cerrar Sesión', onClick: handleLogout },
-    { label: 'Ver Perfil', onClick: handleLogout },
-	];
-
+  
   const handleInvoiceClick = (invoice:InvoiceData) => {
     localStorage.setItem('invoice', JSON.stringify(invoice));
     navigate('/see-invoice');
