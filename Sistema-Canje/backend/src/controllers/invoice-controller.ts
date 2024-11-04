@@ -2,12 +2,10 @@ import Invoice from '../models/invoice-model';
 import Image from '../models/image-model';
 import {InvoiceClass} from '../classes/Invoice'
 
-let invoicesArray: Array<InvoiceClass> = new Array();
-
-
 class InvoiceController {
   private static instance: InvoiceController;
-  
+  private invoicesArray: Array<InvoiceClass> = new Array();
+
   public static getInstance(): InvoiceController {
       if (!InvoiceController.instance) {
         InvoiceController.instance = new InvoiceController();
@@ -42,7 +40,7 @@ class InvoiceController {
           user
         })
         const invoiceObject = new InvoiceClass(number, date, pharmacyId, medicineId, quantity, state, user);
-        invoicesArray.push(invoiceObject);
+        this.invoicesArray.push(invoiceObject);
         const idInvoice = number;
         const newImage = new Image({idInvoice, data});
         await newInvoice.save();
@@ -54,15 +52,15 @@ class InvoiceController {
   }
   public async getAllInvoice(){
     try {
-      if (invoicesArray.length == 0) {
+      if (this.invoicesArray.length == 0) {
         const invoices = await Invoice.find({});
         for (let i in invoices) {
           const invoiceObject = new InvoiceClass(invoices[i].number, invoices[i].date, invoices[i].pharmacyId, invoices[i].medicineId, invoices[i].quantity, invoices[i].state, invoices[i].user);
-          invoicesArray.push(invoiceObject);
+          this.invoicesArray.push(invoiceObject);
         }
         return invoices;
       } else {
-        return invoicesArray;
+        return this.invoicesArray;
       }
     } catch (error: any) {
       throw new Error("No se pudo obtener las facturas. " + error.message);
