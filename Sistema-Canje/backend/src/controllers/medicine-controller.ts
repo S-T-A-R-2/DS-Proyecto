@@ -1,20 +1,40 @@
-import Medicine from '../models/medicine-model';
-import { Request, Response } from 'express';
+  import Medicine from '../models/medicine-model';
+  import { Request, Response } from 'express';
+  import {MedicineClass} from '../classes/Medicine'
 
 
+class MedicineController {
+  
 
-export const getMedicines = async (req: any, res: any) => {
+  private static instance: MedicineController;
+  private medicines: Array<MedicineClass> = new Array();
+
+  public static getInstance(): MedicineController {
+      if (!MedicineController.instance) {
+        MedicineController.instance = new MedicineController();
+      }
+      return MedicineController.instance;
+  }
+
+  public async getMedicines() {
+
+    if (this.medicines.length != 0){return this.medicines}
+    
     try {
-        const medicines = await Medicine.find({});
-        res.json(medicines);
+        const meds = await Medicine.find({});
+        for (let i in meds) {
+          const medObject = new MedicineClass(meds[i].name, meds[i].description, meds[i].redeeming_points, meds[i].points_given);
+          this.medicines.push(medObject);
+        } 
+        return this.medicines;
+      
     } catch (error: any) {
-        res.status(500).json({ message: "AAAA", error: error.message });
+        throw new Error("No se pudo obtener las medicinas. " + error.message);
     }
-};
+  }
 
-export const filterMedicines = async (req: any, res: any) => {
+  public async filterMedicines(searchName:any, inBenefitsProgram:any) {
     try {
-        const {searchName, inBenefitsProgram} = req.query;
         const query: any = {};
 
         if (searchName && searchName.trim() !== "") {
@@ -28,43 +48,51 @@ export const filterMedicines = async (req: any, res: any) => {
         }
 
         const medicines = await Medicine.find(query);
-        res.json(medicines);
+        return medicines;
     } catch (error: any) {
-        res.status(500).json({ message: "Error filtering medicines", error: error.message });
+        throw new Error("No se pudo obtener las medicinas. " + error.message);
     }
+  }
 
-};
-
-export const updateGivenPoints = async (req: any, res: any) => {
-    const {name, points_given} = req.body;
+  public async updateGivenPoints(name:any, points_given:any){
     try {
         const medicine = await Medicine.findOneAndUpdate(
             {name},
             {points_given},
             {new: true}
         );
-        if (!medicine) {
-            return res.status(404).json({message: "Medicine not Found"});
-        }
-        res.json(medicine);
-    } catch (error: any) {
-        res.status(500).json({message: "Error updating given points", error: error.message});
-    }
-};
 
-export const updateRedeemPoints = async (req: any, res: any) => {
-    const {name, redeeming_points} = req.body;
+        for (let m of this.medicines){
+          if (name == m.getName()){
+            m.setPoints_given(points_given);
+          }
+        }
+        return medicine;
+    } catch (error: any) {
+        throw new Error("No se pudo obtener las medicinas. " + error.message);
+    }
+  }
+
+  public async updateRedeemPoints(name:any, redeeming_points:any) {
+    
     try {
         const medicine = await Medicine.findOneAndUpdate(
             {name},
             {redeeming_points},
             {new: true}
         );
-        if (!medicine) {
-            return res.status(404).json({message: "Medicine not Found"});
+
+        for (let m of this.medicines){
+          if (name == m.getName()){
+            m.setRedeemingPoints(redeeming_points);
+          }
         }
-        res.json(medicine);
+
+        return medicine;
     } catch (error: any) {
-        res.status(500).json({message: "Error updating redeem points", error: error.message});
+        throw new Error("No se pudo obtener las medicinas. " + error.message);
     }
-};
+  }
+}
+
+export default MedicineController;
