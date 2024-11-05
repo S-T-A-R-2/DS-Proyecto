@@ -26,7 +26,7 @@ router.get('/filter-medicines', async (req, res) => {
 
 router.put('/updateRedeem', async (req, res) => {
   const { name, redeeming_points } = req.body;
-  console.log(req.body);
+  //console.log(req.body);
   try {
     const medicine = await medicineController.updateRedeemPoints(name, redeeming_points);
     
@@ -42,7 +42,7 @@ router.put('/updateRedeem', async (req, res) => {
 
 router.put('/updateGiven', async (req, res) => {
   const {name, points_given} = req.body;
-  console.log(req.body);
+  //console.log(req.body);
   try {
     const medicine = await medicineController.updateGivenPoints(name, points_given);
     if (!medicine) {

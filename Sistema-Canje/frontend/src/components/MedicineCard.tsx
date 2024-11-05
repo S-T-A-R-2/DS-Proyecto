@@ -48,7 +48,7 @@ export default function MedicineCard({ medicine, reloadMedicines, className, var
             return;
         }
         setError(null);
-        console.log(`Updating points for medicine: ${medicine.name}, Input Value: ${inputValue}`);
+        //console.log(`Updating points for medicine: ${medicine.name}, Input Value: ${inputValue}`);
 
         try {
             await updateFunction({ ...medicine, [key]: Number(inputValue) });
@@ -117,73 +117,3 @@ export default function MedicineCard({ medicine, reloadMedicines, className, var
       </div>
     );
   }
-
-// import React, { useState } from 'react';
-// import Button from '../components/Button';
-// import Input from '../components/Input';
-
-// interface Medicine {
-//   name: string;
-//   description: string;
-//   pointsRequired: number;
-//   pointsAwarded: number;
-// }
-
-// const MedicineCard: React.FC<{ medicine: Medicine }> = ({ medicine }) => {
-//   const [pointsAwardedInput, setPointsAwardedInput] = useState('');
-//   const [pointsRequiredInput, setPointsRequiredInput] = useState('');
-
-//   const handleUpdateClick = async (inputValue: string) => {
-//     console.log(`Updating points for medicine: ${medicine.name}, Input Value: ${inputValue}`);
-//     // Implementation for updating points
-//   };
-
-//   return (
-//     <div className="border border-zinc-700 rounded-lg p-4 shadow-sm bg-zinc-800 text-white">
-//       <div className="flex justify-between items-start mb-2">
-//         <div>
-//           <div className="font-semibold text-lg">{medicine.name}</div>
-//         </div>
-//       </div>
-      
-//       <div className="text-zinc-300 text-sm mb-4">{medicine.description}</div>
-      
-//       <div className="space-y-3">
-//         <div className="flex justify-between items-center text-sm">
-//           <span className="text-zinc-400">Puntos Otorgados:</span>
-//           <span className="text-cyan-400">{medicine.pointsAwarded} pts</span>
-//         </div>
-//         <div className="flex justify-between items-center text-sm">
-//           <span className="text-zinc-400">Puntos Requeridos:</span>
-//           <span className="text-cyan-400">{medicine.pointsRequired} pts</span>
-//         </div>
-//         <div className="flex items-center gap-2 pt-2">
-//           <Input
-//             placeholder="Actualizar Puntos Otorgados"
-//             variant="primary"
-//             className="max-w-[230px]"
-//             value={pointsAwardedInput}
-//             onChange={(e) => setPointsAwardedInput(e.target.value)}
-//           />
-//           <Button variant="primary" onClick={() => handleUpdateClick(pointsAwardedInput)}>
-//             Actualizar
-//           </Button>
-//         </div>
-//         <div className="flex items-center gap-2 pt-2">
-//           <Input
-//             placeholder="Actualizar Puntos para Canjear"
-//             variant="primary"
-//             className="max-w-[230px]"
-//             value={pointsRequiredInput}
-//             onChange={(e) => setPointsRequiredInput(e.target.value)}
-//           />
-//           <Button variant="primary" onClick={() => handleUpdateClick(pointsRequiredInput)}>
-//             Actualizar
-//           </Button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MedicineCard;
