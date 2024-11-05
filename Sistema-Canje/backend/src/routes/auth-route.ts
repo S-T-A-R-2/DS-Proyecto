@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { createAccessToken } from '../libs/jwt';
 import UserController from '../controllers/auth-controller';
 import jwt from 'jsonwebtoken';
+import User from '../models/user-model';
 //import {authRequired} from '../middlewares/validateToken.js';
 const router = Router();
 const userController = UserController.getInstance();
@@ -16,10 +17,11 @@ export const verifyToken = async (req: any, res: any) => {
         if (err) return res.status(403).json({ message: "authorization denied" });
         const { username } = decoded;
 
-        const user = await userController.exists(username);
+        const user = await User.find({username: username});
         if (!user) {
             return res.status(404).json({messages: ['User not found']});
         }
+        
         return res.json(user);
 
     });
