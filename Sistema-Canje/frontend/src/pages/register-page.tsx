@@ -124,17 +124,22 @@ function RegisterPage() {
             </div>
             
             <div>
-                <label
-                    className={labelStyle}>
-                    Rol
-                </label>
-                <Dropdown
+             { user && user.rol=="Admin" &&
+                <div>
+                  <label
+                      className={labelStyle}>
+                      Rol
+                  </label>
+                  <Dropdown
                     buttonText={rol}
                     action={toggleMenu} 
                     isActive={isOpenMenu} 
                     options={profileOptions}
                     showHeader={true}
-                />
+                  />
+                </div>
+              }
+
                 
                 {errors.password && (
                     <p className="text-red-500">Password is required</p>
