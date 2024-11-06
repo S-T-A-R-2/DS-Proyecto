@@ -20,7 +20,7 @@ function RegisterPage() {
         password: string;
     };
     
-    const { signUp, isAuthenticated, errors: registerErrors } = useAuth();
+    const { signUp, isAuthenticated, errors: registerErrors, user } = useAuth();
     const navigate = useNavigate();
 
     const onSubmit = handleSubmit( async (values : FormData) => {
