@@ -20,7 +20,7 @@ export const MainPage = () => {
 
 	const handleLogout = () => {
 		logout();
-		window.location.reload();
+		navigate('/');
 	}
 
   const profileOptions = [
