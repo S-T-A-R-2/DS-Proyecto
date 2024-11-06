@@ -159,9 +159,12 @@ return (
         </div>
       </div>
       {/*Botones*/}
-      <div className="flex mt-4 space-x-2 justify-center">
-        <Button className="text-xl p-2" onClick={()=>navigate('/register-invoice', {state: {username: user?.username}})}>Crear Factura</Button>
-      </div>
+	{user?.rol == 'Cliente' && (
+          <div className="flex mt-4 space-x-2 justify-center">
+        	<Button className="text-xl p-2" onClick={()=>navigate('/register-invoice', {state: {username: user?.username}})}>Crear Factura</Button>
+      	</div>
+        )}
+      
       <div className="absolute bottom-4 right-4">
         <Button onClick={()=>navigate('/main')}>Volver</Button>
       </div>
