@@ -98,11 +98,9 @@ const MedicinePage = () => {
         </div>
 
         {/* Close Button */}
-        <div className="flex justify-end mt-6 pt-4 border-t border-zinc-700">
-          <a href="/main" className="text-xl font-semibold bg-white text-black p-2 rounded">
-            Cerrar
-          </a>
-        </div>
+        <div className="absolute bottom-4 right-4">
+            <Button type="button" onClick={()=>navigate('/main')}>Cerrar</Button>
+          </div>
       </div>
     </div>
   );
