@@ -3,7 +3,7 @@ import mongoose, {model, Document, Schema} from 'mongoose'
 const imageSchema = new Schema({
     //The id is the mongo id from the invoice (the invoice should be created first)
     idInvoice: {
-        type: Number,
+        type: String,
         required: true
     },
     data: {

@@ -7,3 +7,7 @@ const farmacySchema = new Schema({
     }
 });
 export default model('Farmacy', farmacySchema);
+
+
+
+    

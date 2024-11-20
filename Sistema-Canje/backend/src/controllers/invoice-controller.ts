@@ -15,7 +15,7 @@ class InvoiceController {
 
   public async getImage (idInvoice: string) {
     try {
-      const dataImage = await Image.findOne({idInvoice}    )
+      const dataImage = await Image.findOne({idInvoice});
       return dataImage;
     } catch (error: any) {
       throw new Error("No se pudo obtener la imagen");
@@ -25,11 +25,6 @@ class InvoiceController {
     date: string, pharmacyId: string, medicineId: string, 
     quantity: number, data: string, state: string) {
       try {
-        const check = await Invoice.findOne({number})
-        if (check != null) {
-          throw new Error("El objeto ya existe");
-          //return res.status(409).json({nombre:"El objeto ya existe"});
-        }
         const newInvoice = new Invoice({
           number,
           date,
@@ -39,9 +34,9 @@ class InvoiceController {
           state,
           user
         })
+        const idInvoice = newInvoice._id.toString();
         const invoiceObject = new InvoiceClass(number, date, pharmacyId, medicineId, quantity, state, user);
         this.invoicesArray.push(invoiceObject);
-        const idInvoice = number;
         const newImage = new Image({idInvoice, data});
         await newInvoice.save();
         await newImage.save();
