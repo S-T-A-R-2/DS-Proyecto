@@ -1,5 +1,10 @@
 import User from '../models/user-model';
+import Pharmacy from '../models/farmacy-model';
+import {UserCreator} from '../classes/UserCreator';
 // import { createAccessToken } from '../libs/jwt';
+
+const userCreator = UserCreator.getInstance();
+
 class UserController {
     private static instance: UserController;
     
@@ -10,29 +15,10 @@ class UserController {
         return UserController.instance;
     }
 
-    public async createUser(username: String, name: String, phone: number, email: String, password: String, rol: String) {
-        try {
-            const users = await User.find({username : username});
-            if (users.length > 0) {
-                console.log("Usuario ya existente");
-                console.log(users);
-                throw new Error("Error: Usuario existente.");
-            } else {
-                const newUser = new User({
-                    username,
-                    name,
-                    phone,
-                    email,
-                    password,
-                    rol
-                });
-                const savedUser = await newUser.save();
-                return savedUser;
-            }
-        } catch (error : any) {
-            throw new Error(error.message);
-        }
+    public async createUser(username: String, name: String, phone: String, email: String, password: String, rol: String) {
+        return userCreator.createUser(username, name, phone, email, password, rol);
     }
+
     public async getUser(username: String, password: String){
         try {
             const result = await User.find({username : username});
@@ -46,9 +32,6 @@ class UserController {
             if (decryptedPassword !== password) {
                 throw new Error("Contraseña incorrecta");
             }
-    
-            
-            
             return user;
         } catch (error: any) {
             throw new Error(error.message);
