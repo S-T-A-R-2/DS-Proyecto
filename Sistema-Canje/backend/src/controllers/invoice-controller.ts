@@ -1,5 +1,7 @@
 import Invoice from '../models/invoice-model';
 import Image from '../models/image-model';
+import Points from '../models/points-model';
+import MedicineController from './medicine-controller';
 import {InvoiceClass} from '../classes/Invoice'
 
 class InvoiceController {
@@ -61,15 +63,55 @@ class InvoiceController {
       throw new Error("No se pudo obtener las facturas. " + error.message);
     }
   }
-  public async setInvoiceState (number: number, state: string) {
+  public async setInvoiceState (number: Number, state: String, username: String, medicine: String) {
     try{
-      const newInvoice = await Invoice.findOneAndUpdate(
+      /*const newInvoice = await Invoice.findOneAndUpdate(
         { number: number },
         { $set: { state:state } },
         { new: true}
-      );
+      );*/
+
+      /*---------------------------------------------------------------------
+      ----------------CONTROLADOR DE PUNTOS?????----------------------------
+      ---------------------------------------------------------------------*/
+
+
+      const points = await Points.find({username: username, medicineId: medicine});
+      const medicineController = MedicineController.getInstance();
+      const medicineObject = await medicineController.getMedicine((medicine as string));
+
+      console.log(points);
+      if (points.length == 0) {//Si el usuario no ha acumulado puntos en un medicamento especifico
+        const medicineId = medicineObject?.name;
+        const medicineDescription = medicineObject?.description;
+        const totalPoints = medicineObject?.points_given;
+        const availablePoints = totalPoints;
+        const newPoints = new Points({
+          username,
+          medicineId,
+          medicineDescription,
+          totalPoints,
+          availablePoints
+        });
+        newPoints.save();
+      } else {
+        const totalPoints = points[0].totalPoints;
+        const availablePoints = points[0].availablePoints;
+        if (medicineObject?.points_given) {
+          const accumulatedTotalPoints = totalPoints + medicineObject?.points_given;
+          const accumulatedAvailablePoints = totalPoints + medicineObject?.points_given;
+          await Points.findOneAndUpdate({
+            totalPoints: accumulatedTotalPoints,
+            availablePoints: accumulatedAvailablePoints
+          });
+        } else {
+          throw new Error("No se pudo actualizar los puntos");
+        }
+      }
+      
+      
     } catch (error:any) {
-      throw new Error("No se pudo actualizar la factura. " + error.message);
+      throw new Error("No se pudo actualizar la factura o los puntos. " + error.message);
     }
   }
 

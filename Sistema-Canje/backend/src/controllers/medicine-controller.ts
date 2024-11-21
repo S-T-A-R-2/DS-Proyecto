@@ -93,6 +93,10 @@ class MedicineController {
         throw new Error("No se pudo obtener las medicinas. " + error.message);
     }
   }
+
+  public async getMedicine(name:string) {
+    return await Medicine.findOne({name: name});
+  }
 }
 
 export default MedicineController;
