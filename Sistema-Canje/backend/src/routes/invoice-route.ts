@@ -46,7 +46,9 @@ router.get('/getImage', async (req, res) => {
 });
 router.post('/set-invoice-state', async (req, res) => {
     try {
-        await invoiceController.setInvoiceState(req.body.number, req.body.state);
+        await invoiceController.setInvoiceState(req.body.number, req.body.state, 
+            req.body.username, req.body.medicineId
+        );
         res.status(201).json({message: "Se actualizó correctamente."});
     } catch (error: any) {
         res.status(500).json({message: error.message });
