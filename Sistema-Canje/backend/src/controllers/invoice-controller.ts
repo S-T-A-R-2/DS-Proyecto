@@ -65,11 +65,11 @@ class InvoiceController {
   }
   public async setInvoiceState (number: Number, state: String, username: String, medicine: String) {
     try{
-      /*const newInvoice = await Invoice.findOneAndUpdate(
+      const newInvoice = await Invoice.findOneAndUpdate(
         { number: number },
         { $set: { state:state } },
         { new: true}
-      );*/
+      );
 
       /*---------------------------------------------------------------------
       ----------------CONTROLADOR DE PUNTOS?????----------------------------
