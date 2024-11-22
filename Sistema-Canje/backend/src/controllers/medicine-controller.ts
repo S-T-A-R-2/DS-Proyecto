@@ -1,6 +1,8 @@
   import Medicine from '../models/medicine-model';
   import { Request, Response } from 'express';
   import {MedicineClass} from '../classes/Medicine'
+  import UserController from './auth-controller';
+  import InvoiceController from './invoice-controller';
 
 
 class MedicineController {

@@ -10,6 +10,8 @@ import medicineRoutes from './routes/medicine-route'
 
 import pharmacyRoutes from './routes/pharmacy-route'
 
+import pointsRoutes from './routes/points-route'
+
 import cors from 'cors';
 import {connectDB} from './db'
 
@@ -28,9 +30,10 @@ app.use(cookieParser());
 
 //app.use("/api", blogsRoutes);
 app.use("/api", authRoutes);
-app.use("/api", invoiceRoutes)
+app.use("/api", invoiceRoutes);
 app.use("/api", medicineRoutes);
-app.use("/api", pharmacyRoutes)
+app.use("/api", pharmacyRoutes);
+app.use("/api", pointsRoutes);
 
 app.listen(5000);
 
