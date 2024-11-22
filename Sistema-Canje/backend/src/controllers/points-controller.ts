@@ -76,14 +76,13 @@ class PointsController {
         //Datos basicos del usuario
         const user = await userController.getUserInfo(username);
 
-        //Informacion de puntos
+        //Informacion de puntos por cada medicamento
         for (let i = 0; i < medicines.length; i++) {
             point = await Points.findOne({username: username, medicineId:medicines[i]});
             points.push(point);
-            console.log(medicines[i]);
         }
 
-        console.log(username);
+        return {user: user, points: points};
   }
 
 }
