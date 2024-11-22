@@ -5,7 +5,8 @@ export class InvoiceClass {
                 private medicineId: string,
                 private quantity: number,
                 private state: string,
-                private user: string) {
+                private user: string,
+                private _id: string) {
         this.number = number;
         this.date = date;
         this.pharmacyId = pharmacyId;
@@ -13,6 +14,11 @@ export class InvoiceClass {
         this.quantity = quantity;
         this.state = state;
         this.user = user;
+        this._id = _id;
+    }
+
+    setState(state: string) {
+        this.state = state;
     }
 
     getUser() {
@@ -39,4 +45,7 @@ export class InvoiceClass {
         return this.state;
     }
 
+    getId() {
+        return this._id;
+    }
 }

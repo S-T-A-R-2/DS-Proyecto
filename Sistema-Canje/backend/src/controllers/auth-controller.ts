@@ -19,6 +19,20 @@ class UserController {
         return userCreator.createUser(username, name, phone, email, password, rol);
     }
 
+
+    public async getUserInfo(username: String) {
+        try {
+            const result = await User.find({username: username});
+            if (result.length == 0) {
+                throw new Error("Usuario no encontrado");
+            } 
+            const user = result[0];
+            return {username: user.username, name: user.name, phone: user.phone, email: user.email};
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
     public async getUser(username: String, password: String){
         try {
             const result = await User.find({username : username});

@@ -1,8 +1,7 @@
 import Invoice from '../models/invoice-model';
 import Image from '../models/image-model';
-import Points from '../models/points-model';
-import MedicineController from './medicine-controller';
 import {InvoiceClass} from '../classes/Invoice'
+import PointsController from './points-controller';
 
 class InvoiceController {
   private static instance: InvoiceController;
@@ -37,7 +36,7 @@ class InvoiceController {
           user
         })
         const idInvoice = newInvoice._id.toString();
-        const invoiceObject = new InvoiceClass(number, date, pharmacyId, medicineId, quantity, state, user);
+        const invoiceObject = new InvoiceClass(number, date, pharmacyId, medicineId, quantity, state, user, newInvoice._id.toString());
         this.invoicesArray.push(invoiceObject);
         const newImage = new Image({idInvoice, data});
         await newInvoice.save();
@@ -48,12 +47,21 @@ class InvoiceController {
       }
   }
   public async getAllInvoice(){
+    let add: boolean;
     try {
       if (this.invoicesArray.length == 0) {
         const invoices = await Invoice.find({});
         for (let i in invoices) {
-          const invoiceObject = new InvoiceClass(invoices[i].number, invoices[i].date, invoices[i].pharmacyId, invoices[i].medicineId, invoices[i].quantity, invoices[i].state, invoices[i].user);
-          this.invoicesArray.push(invoiceObject);
+          add = true;
+          for (let i in this.invoicesArray) {
+            if (this.invoicesArray[i].getId() === invoices[i]._id.toString()) {
+              add = false;
+            }
+          }
+          if (add) {
+            const invoiceObject = new InvoiceClass(invoices[i].number, invoices[i].date, invoices[i].pharmacyId, invoices[i].medicineId, invoices[i].quantity, invoices[i].state, invoices[i].user, invoices[i]._id.toString());
+            this.invoicesArray.push(invoiceObject);
+          }
         }
         return invoices;
       } else {
@@ -63,56 +71,39 @@ class InvoiceController {
       throw new Error("No se pudo obtener las facturas. " + error.message);
     }
   }
-  public async setInvoiceState (number: Number, state: String, username: String, medicine: String) {
+  public async setInvoiceState (number: Number, state: string, username: String, medicine: String, quantity: number, _id: string) {
     try{
       const newInvoice = await Invoice.findOneAndUpdate(
         { number: number },
         { $set: { state:state } },
         { new: true}
       );
-
-      /*---------------------------------------------------------------------
-      ----------------CONTROLADOR DE PUNTOS?????----------------------------
-      ---------------------------------------------------------------------*/
-
-
-      const points = await Points.find({username: username, medicineId: medicine});
-      const medicineController = MedicineController.getInstance();
-      const medicineObject = await medicineController.getMedicine((medicine as string));
-
-      console.log(points);
-      if (points.length == 0) {//Si el usuario no ha acumulado puntos en un medicamento especifico
-        const medicineId = medicineObject?.name;
-        const medicineDescription = medicineObject?.description;
-        const totalPoints = medicineObject?.points_given;
-        const availablePoints = totalPoints;
-        const newPoints = new Points({
-          username,
-          medicineId,
-          medicineDescription,
-          totalPoints,
-          availablePoints
-        });
-        newPoints.save();
-      } else {
-        const totalPoints = points[0].totalPoints;
-        const availablePoints = points[0].availablePoints;
-        if (medicineObject?.points_given) {
-          const accumulatedTotalPoints = totalPoints + medicineObject?.points_given;
-          const accumulatedAvailablePoints = totalPoints + medicineObject?.points_given;
-          await Points.findOneAndUpdate({
-            totalPoints: accumulatedTotalPoints,
-            availablePoints: accumulatedAvailablePoints
-          });
-        } else {
-          throw new Error("No se pudo actualizar los puntos");
+      for (let i = 0; i < this.invoicesArray.length; i++) {
+        if (this.invoicesArray[i].getId() === _id) {
+          this.invoicesArray[i].setState(state);
         }
       }
-      
-      
-    } catch (error:any) {
-      throw new Error("No se pudo actualizar la factura o los puntos. " + error.message);
+      if (state === "Aprobada") {
+        const pointsController = PointsController.getInstance();
+        await pointsController.updatePoints(username, medicine, quantity);
+      }
+    } catch (error: any) {
+      throw new Error("Error inesperado: " + error.message);
     }
+  }
+
+
+  public async getApprovedMedicines(username: String) {
+    const invoices = await Invoice.find({user: username, state: "Aprobada"});
+    const medicines = new Array;
+
+    //Obtener nombre de medicamentos de facturas aprobadas
+    for (let i = 0; i < invoices.length; i++) {
+      if (!medicines.includes(invoices[i].medicineId)) {
+        medicines.push(invoices[i].medicineId);
+      }
+    }
+    return medicines;
   }
 
   public async filterInvoices(stateFilter: any, dateRangeFilter: any, searchInvoiceNumber: any, userFilter: any){

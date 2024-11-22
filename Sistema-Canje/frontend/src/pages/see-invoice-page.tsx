@@ -8,14 +8,15 @@ import Button from '../components/Button'
 function SeeInvoice() {
 	  const { isAuthenticated, user } = useAuth();
     type InvoiceData = {
-        number: number;
-        date: string;
-        pharmacyId: string;
-        medicineId: string;
-        quantity: number;
-        image: string;
-        state: string;
-        user: string;
+      _id: string;
+      number: number;
+      date: string;
+      pharmacyId: string;
+      medicineId: string;
+      quantity: number;
+      imageId: string;
+      state: string;
+      user: string;
     };
 
     const [base64Image, setBase64Image] = useState<string | undefined>("https://img.icons8.com/fluent-systems-regular/512/FFFFFF/picture.png");
@@ -26,13 +27,14 @@ function SeeInvoice() {
     
 
     const loadImage = async () => {
+      console.log(invoice?._id)
       const setImage = async (image:string) => {
         setBase64Image(image);
       }
       if (!imageFlag && invoice){
+        
         try {
-          const imageData = await getImage(invoice.number);
-          console.log(imageData);
+          const imageData = await getImage(invoice?._id);
           setImage(imageData.data.data);
           setImageFlag(true);
         } catch (error:any){
@@ -53,14 +55,14 @@ function SeeInvoice() {
 
     const handleAceptar = ()=>{
       if (invoice) {
-        setInvoiceState({number:invoice.number, state:"Aprobada"});
+        setInvoiceState({number:invoice.number, state:"Aprobada", username:invoice.user, medicineId:invoice.medicineId, quantity:invoice.quantity, _id:invoice._id});
         navigate("/main");
       }
     };
     
     const handleRechazar = ()=>{
       if (invoice) {
-        setInvoiceState({number:invoice.number, state:"Rechazada"});
+        setInvoiceState({number:invoice.number, state:"Rechazada", username:invoice.user, medicineId:invoice.medicineId, quantity:0, _id:invoice._id});
         navigate("/main");
       }
     };

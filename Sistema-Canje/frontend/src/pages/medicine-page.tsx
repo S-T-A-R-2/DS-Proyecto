@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import MedicineCard from '../components/MedicineCard';
-import { getMedicines, filterMedicines } from '../api/auth';
+import { getMedicines, filterMedicines, getBenefitInfo } from '../api/auth';
 import { useAuth } from '../context/auth-context';
 import {useNavigate} from 'react-router-dom';
 

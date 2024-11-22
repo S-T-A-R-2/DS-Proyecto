@@ -10,6 +10,7 @@ export const FindInvoicePage = () => {
 	const { isAuthenticated, logout, user } = useAuth();
 	const navigate = useNavigate();
   type InvoiceData = {
+    _id: string;
     number: number;
     date: string;
     pharmacyId: string;
@@ -38,6 +39,7 @@ export const FindInvoicePage = () => {
   const [loadInvoices, setLoadInvoices] = useState<boolean>(true);
 
   useEffect(()  => {
+    
     const getAllInvoicesAux = async () => {
       if (user && user.rol == "Operativo"){
         const resp = await getAllInvoices();
@@ -46,13 +48,15 @@ export const FindInvoicePage = () => {
         const resp = await filterInvoices(stateFilter, dateRangeFilter, searchInvoiceNumber, user.username);
         setUserFilter(user.username);
         setInvoices(resp.data);
+        
       }
     }
+    
     if (loadInvoices){
       getAllInvoicesAux();
       setLoadInvoices(!loadInvoices);
     }
-  }, [username])
+  }, [])
     
   const handleSearch = async () => {
       const resp = await filterInvoices(stateFilter, dateRangeFilter, searchInvoiceNumber, userFilter);

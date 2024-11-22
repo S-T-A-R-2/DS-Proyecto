@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import clsx from "clsx";
 
 interface Invoice {
+    _id: string
     number: number;
     date: string;
     pharmacyId: string;

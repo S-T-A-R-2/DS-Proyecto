@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 //import {authRequired} from '../middlewares/validateToken.js';
 import InvoiceController from '../controllers/invoice-controller'; 
+import MedicineController from '../controllers/medicine-controller';
 
 const invoiceController = InvoiceController.getInstance();
 const router = Router();
@@ -47,11 +48,12 @@ router.get('/getImage', async (req, res) => {
 router.post('/set-invoice-state', async (req, res) => {
     try {
         await invoiceController.setInvoiceState(req.body.number, req.body.state, 
-            req.body.username, req.body.medicineId
+            req.body.username, req.body.medicineId, req.body.quantity, req.body._id
         );
         res.status(201).json({message: "Se actualizó correctamente."});
     } catch (error: any) {
         res.status(500).json({message: error.message });
     }
 });
+
 export default router;
