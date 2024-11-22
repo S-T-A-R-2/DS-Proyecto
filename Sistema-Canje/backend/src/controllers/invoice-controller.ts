@@ -92,6 +92,7 @@ class InvoiceController {
     }
   }
 
+
   public async getApprovedMedicines(username: String) {
     const invoices = await Invoice.find({user: username, state: "Aprobada"});
     const medicines = new Array;
