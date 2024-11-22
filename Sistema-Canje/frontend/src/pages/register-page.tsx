@@ -36,6 +36,7 @@ function RegisterPage() {
 		{ label: 'Cliente', onClick: () => {setRol('Cliente'); setIsOpenMenu(!isOpenMenu)}},
         { label: 'Operativo', onClick: () => {setRol('Operativo'); setIsOpenMenu(!isOpenMenu)} },
         { label: 'Admin', onClick: () => {setRol('Admin'); setIsOpenMenu(!isOpenMenu)} },
+        { label: 'Farmacia', onClick: () => {setRol('Farmacia'); setIsOpenMenu(!isOpenMenu)} }
 	];
 
     const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);

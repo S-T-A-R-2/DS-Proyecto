@@ -11,6 +11,7 @@ import CreateInvoice from './pages/create-invoice-page';
 import FindInvoicePage from "./pages/find-invoice-page";
 import SeeInvoice from "./pages/see-invoice-page";
 import MedicinePage from './pages/medicine-page';
+import PointsPage from './pages/points-page';
 
 import './App.css';
 
@@ -33,6 +34,7 @@ function App() {
               <Route path="/medicine" element={<MedicinePage />} />
               <Route path="/createInvoice" element = {<CreateInvoice/>} />
               <Route path="/register-invoice" element = {<CreateInvoice/>} />
+              <Route path="/benefit-info" element = {<PointsPage/>} />
             </Route>
 
 

@@ -76,6 +76,12 @@ return (
             <Button onClick={() => {navigate('/register', {state: {user : user}})}}>Registrar Usuario</Button>
           </div>
         )}
+
+        {user?.rol == 'Farmacia' && (
+          <div>
+            <Button onClick={() => {navigate('/benefit-info', {state: {user: user}})}}>Ver beneficios</Button>
+          </div>
+        )}
       </div>
 
     </div>
