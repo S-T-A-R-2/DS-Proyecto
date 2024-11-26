@@ -31,7 +31,7 @@ const invoiceSchema = new Schema({
     },
     exchangeNumber: {
         type: Number,
-        requrired: false
+        required: false
     }
 });
 

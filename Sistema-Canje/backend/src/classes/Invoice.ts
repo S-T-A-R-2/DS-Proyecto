@@ -30,6 +30,7 @@ export default class InvoiceClass implements  Element{
         this.state = state;
     }
     
+    
 
     getUser() {
         return this.user;
