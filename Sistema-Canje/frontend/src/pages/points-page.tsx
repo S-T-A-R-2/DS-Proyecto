@@ -42,7 +42,7 @@ const MedicinePage = () => {
     setSearchText(e.target.value);
   };
 
-  const handleSearchByUser = async () => {
+  const handleSearchByUser = async (searchText: string) => {
     try {
       const resp = await getBenefitInfo(searchText);
       const points = resp.data.points;
@@ -71,6 +71,18 @@ const MedicinePage = () => {
     }
   };
 
+  useEffect(() => {
+    if (user?.rol === 'Cliente') {
+      handleSearchByUser(user.username);
+    }
+  }, [user]);
+
+  const handleSearch = () => {
+    if (user?.rol === 'Farmacia') {
+      handleSearchByUser(searchText);
+    }
+  };
+
   function exchange(user: any, medicine: any, farmacy: any){
     //const numExchange = createExchangeRegister(user, medicine, farmacy).data;
     //updateInvoice(numExchange);
@@ -94,7 +106,7 @@ const MedicinePage = () => {
               variant="primary"
               className="flex-grow"
             />
-            <Button variant="primary" onClick={handleSearchByUser}>
+            <Button variant="primary" onClick={handleSearch}>
                 Buscar medicamentos por usuario
             </Button>
           </div>
@@ -104,6 +116,7 @@ const MedicinePage = () => {
           {medicinesList && userInfo ? (
               <PointsMedicine
                 user={userInfo.username}
+                role={user?.rol || ''}
                 medicines={medicinesList}
               />
             

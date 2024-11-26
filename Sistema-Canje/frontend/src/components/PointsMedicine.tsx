@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const stats = [
     { id: 1, name: 'Transactions every 24 hours', value: '44 million' },
@@ -17,18 +17,24 @@ const stats = [
   
   interface Data {
     user: string
+    role: string
     medicines: MedicineInfo[];
   }
 
 
-  export default function PointsMedicine({user, medicines}: Data) {
+  export default function PointsMedicine({user, role, medicines}: Data) {
     const navigate = useNavigate();
+    const handleRedirect = (medicineId: string) => {
+      if (role === 'Cliente') {
+        navigate(`/redeem/${medicineId}`);
+      }
+    }
 
     return (
     <div>
         <ul className="space-y-6 w-full bg-white overflow-y-auto h-96">
         {medicines.map((medicine) => (
-            <li  className="space-y-2 w-full border-2 border-black" onClick={e => navigate(`/redeem/${medicine.medicineId}`)}>
+            <li  className="space-y-2 w-full border-2 border-black" onClick={() => handleRedirect(medicine.medicineId) }>
                 <dl className=" p-2 grid grid-cols-1 gap-x-8 gap-y-6 text-center lg:grid-cols-1">
                     <div className="w-full text-black font-bold sm:text-5xl">
                     <p>{medicine.medicineId}</p>

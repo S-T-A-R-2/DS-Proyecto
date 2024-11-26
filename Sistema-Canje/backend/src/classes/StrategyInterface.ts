@@ -1,7 +1,7 @@
 import ExchangeRecordClass from './ExchangeRecord';
 
 interface Strategy {
-  public async execute();
+  execute(): Promise<any>;
 }
 
 export default Strategy;

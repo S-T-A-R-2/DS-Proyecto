@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
-import { getBenefitInfo} from '../api/auth'; //getInvoices
+import { getBenefitInfo, getChronologicalInvoices} from '../api/auth'; //getInvoices
 import { useAuth } from '../context/auth-context';
 
 interface MedicineInfo {
@@ -15,8 +15,8 @@ interface MedicineInfo {
 }
 
 interface Invoice {
-    number: string;
-    date: string;
+    invoiceNumber: string;
+    invoiceDate: string;
     pharmacy: string;
     usedInExchange: string | null;
 }
@@ -50,8 +50,9 @@ export const RedeemPage = () => {
                 return;
               }
 
-             //const chrnologicalResopnse = await getInvoicesByCriteria(user.username, 'chronological', undefined, medicineId);
-            //console.log('Facturas ordenadas Cronologicamente:', chrnologicalResopnse.data);
+            const invoicesResponse = await getChronologicalInvoices(medicineId as string, user?.username);
+            console.log(invoicesResponse.data);
+            setInvoices(invoicesResponse.data);
 
             // const exchangeResponse = await getInvoicesByCriteria('joseUsuario', 'exchange', '1');
             // console.log('Facturas de canje:', exchangeResponse.data.invoices);
@@ -128,9 +129,9 @@ export const RedeemPage = () => {
             <h3 className="text-lg font-bold">Facturas Relacionadas</h3>
             <ul>
               {invoices.map((invoice) => (
-                <li key={invoice.number} className="border-b border-gray-600 py-2">
-                  <p>Factura: {invoice.number}</p>
-                  <p>Fecha: {invoice.date}</p>
+                <li key={invoice.invoiceNumber} className="border-b border-gray-600 py-2">
+                  <p>Factura: {invoice.invoiceNumber}</p>
+                  <p>Fecha: {invoice.invoiceDate}</p>
                   <p>Farmacia: {invoice.pharmacy}</p>
                   <p>
                     Estado:{' '}
