@@ -5,7 +5,6 @@ import ExchangeRecord from '../models/exchange-record-model';
 import { Request, Response } from 'express';
 import Sequence from '../models/sequence-model';
 import VisitorUpdate from '../classes/Visitor/visitor-update';
-import InvoiceClass from '../classes/Invoice'
 import InvoiceController from './invoice-controller';
 import GetRegisterVisitor from '../classes/Visitor/GetRegistersVisitor';
 import InvoiceClass from '../classes/Invoice'
