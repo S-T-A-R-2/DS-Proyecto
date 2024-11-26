@@ -1,44 +1,63 @@
-import ExchangeRecord from '../models/exchange-record-model.ts';
-import {ExchangeRecordClass} from '../classes/ExchangeRecord.ts'
+import {ExchangeRecordClass} from '../classes/ExchangeRecord'
+//import CronologicalStrategy from '../classes/CronologicalStrategy'
+import DetailStrategy from '../classes/DetailStrategy';
+import ExchangeRecord from '../models/exchange-record-model';
+import { Request, Response } from 'express';
+import Sequence from '../models/sequence-model';
+class ExchangeController {
+    private static instance: ExchangeController;
+    private exchanges: Array<ExchangeRecordClass> = new Array();
 
-class ExchangeRecordController {
-
-  private static instance: ExchangeRecordController;
-  private exchanges: Array<ExchangeRecordClass> = new Array();
-  
-  public static getInstance():ExchangeRecordController {
-    if (!ExchangeRecordController.instance){
-      ExchangeRecordController.instance = new ExchangeRecordController();
+    public static getInstance(): ExchangeController {
+        if (!ExchangeController.instance) {
+            ExchangeController.instance = new ExchangeController();
+        }
+        return ExchangeController.instance;
     }
-    return ExchangeRecordController.instance;
-  }
-
-  public createExchangeRecord(r) {};
-
-  public getAllExchanges(){
-    if (this.exchanges.length == 0){
-        const exchanges = await ExchangeRecord.find({});
-        for (let i in exchanges) {
-          add = true;
-          for (let i in this.exchanges) {
-            if (this.exchanges[i].getId() === exchanges[i]._id.toString()) {
-              add = false;
+    
+    public async createExchangeRecord(username: any, medicine: any, pharmacy: any, invoicesUsed: any) {
+        try {
+            const sequence = await Sequence.find({_id: "ExchangeRecord"});
+            let number = 0;
+            if (sequence.length == 0) {
+                let sequence = new Sequence({
+                    _id: "ExchangeRecord",
+                    number: 0
+                });
+                sequence.save();
+            } else {
+                number = sequence[0].number + 1;
+                await Sequence.findOneAndUpdate({_id: "ExchangeRecord", number: number});
             }
-          }
-          if (add) {
-            const object = new ExchangeRecordClass(exchanges[i].number,
-                                                    exchanges[i].username,
-                                                    exchanges[i].medicine,
-                                                    exchanges[i].date,
-                                                    exchanges[i].pharmacy,
-                                                    exchanges[i].invoicesUsed);
-            this.exchanges.push(object);
-          }
- 
+            const newRecord = new ExchangeRecord({
+                number,
+                username,
+                medicine,
+                pharmacy,
+                date: new Date(), 
+                invoicesUsed,
+            });
+            await newRecord.save();
+        } catch (error: any) {
+            throw new Error("No se pudo obtener las farmacias. " + error.message);
+        }
     }
-    return this.exchanges;
+    public async getAllExchanges(){
+        if (this.exchanges.length == 0){
+            let detail = new DetailStrategy();
+            const a = await detail.execute()
+            this.exchanges = a.sort((a, b) => a.date.localeCompare(b.date));
 
-  }
-}
+        }
+        return this.exchanges;
+    }
 
-export default ExchangeRecordController;
+    public getExchangesByUser(username:string){
+        let result = this.exchanges.filter((ex) => ex.username === username);
+
+        return result.sort((a, b) => a.date.localeCompare(b.date));
+        
+    }
+
+} 
+export default ExchangeController;

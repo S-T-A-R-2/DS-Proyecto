@@ -13,6 +13,7 @@ import SeeInvoice from "./pages/see-invoice-page";
 import MedicinePage from './pages/medicine-page';
 import PointsPage from './pages/points-page';
 import RedeemPage from './pages/redeem-page';
+import SeeExchangesPage from './pages/see-exchanges-page';
 
 import './App.css';
 
@@ -37,6 +38,7 @@ function App() {
               <Route path="/register-invoice" element = {<CreateInvoice/>} />
               <Route path="/benefit-info" element = {<PointsPage/>} />
               <Route path="/redeem/:medicineId" element = {<RedeemPage/>} />
+              <Route path="/see-exchanges" element = {<SeeExchangesPage/>} />
             </Route>
 
 

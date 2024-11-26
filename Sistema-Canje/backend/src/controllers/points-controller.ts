@@ -46,17 +46,28 @@ class PointsController {
                 });
                 await newPoints.save();
             } else {
-                const totalPoints = points[0].totalPoints;
-                const availablePoints = points[0].availablePoints;
-                if (medicineObject?.points_given) {
-                    const accumulatedTotalPoints = totalPoints + (medicineObject?.points_given * quantity);
-                    const accumulatedAvailablePoints = availablePoints + (medicineObject?.points_given * quantity);
+                if (quantity < 0) {
                     await Points.findOneAndUpdate({
-                        totalPoints: accumulatedTotalPoints,
-                        availablePoints: accumulatedAvailablePoints
+                        username: points[0].username,
+                        medicineId: points[0].medicineId,
+                        availablePoints: points[0].availablePoints - medicineObject.redeeming_points,
+                        usedPoints: points[0].usedPoints + medicineObject.redeeming_points
                     });
                 } else {
-                    throw new Error("No se pudo actualizar los puntos");
+                    const totalPoints = points[0].totalPoints;
+                    const availablePoints = points[0].availablePoints;
+                    if (medicineObject?.points_given) {
+                        const accumulatedTotalPoints = totalPoints + (medicineObject?.points_given * quantity);
+                        const accumulatedAvailablePoints = availablePoints + (medicineObject?.points_given * quantity);
+                        await Points.findOneAndUpdate({
+                            username: points[0].username,
+                            medicineId: points[0].medicineId,
+                            totalPoints: accumulatedTotalPoints,
+                            availablePoints: accumulatedAvailablePoints
+                        });
+                    } else {
+                        throw new Error("No se pudo actualizar los puntos");
+                    }
                 }
             }
         } catch (error:any) {

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const stats = [
     { id: 1, name: 'Transactions every 24 hours', value: '44 million' },
