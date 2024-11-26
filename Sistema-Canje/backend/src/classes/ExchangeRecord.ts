@@ -25,8 +25,7 @@ export class ExchangeRecordClass {
     public getInvoicesUsed() {
       return this.invoicesUsed;
     }
-
-    
+   
 }
 
 export default ExchangeRecordClass;

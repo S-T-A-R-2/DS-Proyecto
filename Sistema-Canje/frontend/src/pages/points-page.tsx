@@ -71,6 +71,9 @@ const MedicinePage = () => {
     }
   };
 
+
+
+
   function exchange(user: any, medicine: any, farmacy: any){
     //const numExchange = createExchangeRegister(user, medicine, farmacy).data;
     //updateInvoice(numExchange);

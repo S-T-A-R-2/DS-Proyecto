@@ -22,17 +22,17 @@ class ExchangeController {
     
     public async createExchangeRecord(username: any, medicine: any, pharmacy: any, invoicesUsed: any) {
         try {
-            const sequence = await Sequence.find({_id: "ExchangeRecord"});
+            const sequence = await Sequence.find({schema: "ExchangeRecord"});
             let number = 0;
             if (sequence.length == 0) {
                 let sequence = new Sequence({
-                    _id: "ExchangeRecord",
+                    schema: "ExchangeRecord",
                     number: 0
                 });
                 sequence.save();
             } else {
                 number = sequence[0].number + 1;
-                await Sequence.findOneAndUpdate({_id: "ExchangeRecord", number: number});
+                await Sequence.findOneAndUpdate({schema: "ExchangeRecord", number: number});
             }
             const newRecord = new ExchangeRecord({
                 number,
@@ -65,6 +65,12 @@ class ExchangeController {
         
         return result.sort((a, b) => a.date.localeCompare(b.date));
         
+
+    }
+
+    public async getChronologicalInvoices(medicineId: string, username: string) {
+        const strategy = new DetailStrategy();
+        return await strategy.getChronologicalInvoices(medicineId, username);
     }
 
     public async getCurrentStatistics(){
@@ -83,6 +89,7 @@ class ExchangeController {
 
         return visitor.getStatistics();
     }
+
 
 } 
 export default ExchangeController;

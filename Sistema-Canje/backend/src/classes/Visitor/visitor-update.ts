@@ -8,7 +8,7 @@ class VisitorUpdate implements Visitor {
         this.exchangeNumber = number;
     }
     visitInvoice(element: Invoice): void {
-        element.setState("Canjeado");
+        element.setState("Canjeada");
         element.setExchangeNumber(this.exchangeNumber);
     }
 }

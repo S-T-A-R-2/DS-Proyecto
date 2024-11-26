@@ -33,4 +33,17 @@ router.get('/get-statistics', async(req,res) =>{
   }
 });
 
+
+router.get('/get-chronological-invoices', async (req, res) => {
+  try {
+    const {medicineId, username} = req.query;
+    
+    const invoices = await exchangeController.getChronologicalInvoices(medicineId as string, username as string);
+    res.status(201).json(invoices);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 export default router;
