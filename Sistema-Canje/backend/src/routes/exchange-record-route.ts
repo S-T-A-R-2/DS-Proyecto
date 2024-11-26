@@ -33,6 +33,15 @@ router.get('/get-exchanges-user', async (req, res) => {
     }
 });
 
+router.get('/get-statistics', async(req,res) =>{
+  try {
+      const stats = await exchangeController.getCurrentStatistics();
+      res.status(201).json(stats);
+  } catch (err:any) {
+        res.status(500).json({ message: err.message });
+  }
+});
+
 
 router.get('/get-chronological-invoices', async (req, res) => {
   try {

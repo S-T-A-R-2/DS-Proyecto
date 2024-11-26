@@ -2,7 +2,7 @@ import React, {useState, useEffect, useInsertionEffect} from 'react'
 import Button from '../components/Button';
 import { useAuth } from '../context/auth-context'
 import {useNavigate} from 'react-router-dom'
-import {getAllExchanges, getExchangesByUser} from '../api/auth';
+import {getAllExchanges, getExchangesByUser, getCurrentStatistics} from '../api/auth';
 import ExchangeList from '../components/ExchangesList'
 
 export const SeeExchangesPage = () => {
@@ -11,16 +11,28 @@ export const SeeExchangesPage = () => {
 	const { user } = useAuth();
   const [exchanges, setExchanges] = useState<any>([]);
   const [search, setSearch] = useState<any>([]);
+  const [acumulated, setAcumulated] = useState<number>(0);
+  const [used, setUsed] = useState<number>(0);
+  const [available, setAvailable] = useState<number>(0);
 
   useEffect(()  => {
     
     const getAllExchangesAux = async () => {
       if (user?.rol == "Farmacia"){
         const resp = await getAllExchanges();
+        const stats = await getCurrentStatistics();
         setExchanges(resp.data);
+        setAcumulated(stats.data.acumulatedPoints);
+        setUsed(stats.data.usedPoints);
+        setAvailable(stats.data.availablePoints);
       } else if (user) {
         const resp = await getExchangesByUser(user.username);
         setExchanges(resp.data);
+        const stats = await getCurrentStatistics();
+        setExchanges(resp.data);
+        setAcumulated(stats.data.acumulatedPoints);
+        setUsed(stats.data.usedPoints);
+        setAvailable(stats.data.availablePoints);
       }
     }
     
@@ -62,6 +74,9 @@ return (
             <p className="text-left text-white w-full">Cargando registros de canjes ...</p>
           )
       }
+      <p>Puntos globales acumulados: {acumulated} </p>
+      <p>Puntos globales usados en canjes: {used} </p>
+      <p>Puntos globales disponibles: {available}</p>
       <div className="absolute bottom-4 right-4">
         <Button onClick={()=>navigate('/main')}>Volver</Button>
       </div>

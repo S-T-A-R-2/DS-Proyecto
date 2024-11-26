@@ -51,22 +51,17 @@ class InvoiceController {
     try {
       if (this.invoicesArray.length == 0) {
         const invoices = await Invoice.find({});
-        for (let i in invoices) {
-          add = true;
-          for (let i in this.invoicesArray) {
-            if (this.invoicesArray[i].getId() === invoices[i]._id.toString()) {
-              add = false;
-            }
-          }
-          if (add) {
-            const invoiceObject = new InvoiceClass(invoices[i].number, invoices[i].date, invoices[i].pharmacyId, invoices[i].medicineId, invoices[i].quantity, invoices[i].state, invoices[i].user, invoices[i]._id.toString());
+        for (let i of invoices){
+
+            const invoiceObject = new InvoiceClass(i.number,i.date, i.pharmacyId, i.medicineId, i.quantity, i.state, i.user, i._id.toString());
             this.invoicesArray.push(invoiceObject);
-          }
         }
+
         return this.invoicesArray;
       } else {
         return this.invoicesArray;
       }
+      return this.invoicesArray;
     } catch (error: any) {
       throw new Error("No se pudo obtener las facturas. " + error.message);
     }

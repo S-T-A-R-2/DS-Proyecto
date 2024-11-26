@@ -45,6 +45,10 @@ export default class InvoiceClass implements  Element{
         return this.pharmacyId;
     }
 
+    getMedicineId() {
+      return this.medicineId;
+    } 
+
     getQuantity() {
         return this.quantity;
     }
@@ -66,7 +70,7 @@ export default class InvoiceClass implements  Element{
     getExchangeNumber(){
         return this.exchangeNumber;
     }
-    accept(v: Visitor): void {
-        v.visitInvoice(this);
+    async accept(v: Visitor): Promise<void> {
+        await v.visitInvoice(this);
     }
 }
