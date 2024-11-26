@@ -102,23 +102,26 @@ class PointsController {
         //Informacion de puntos por cada medicamento
         for (let i = 0; i < medicines.length; i++) {
             point = (await Points.findOne({username: username, medicineId:medicines[i]}));
-            points.push(point);
+            if (point != null) {
+              points.push(point);
+            }
         }
 
         points.sort(compare)
         
         return {user: user, points: points};
-        function compare(a: any, b: any) {
-            if (a.availablePoints < b.availablePoints) {
-                return -1;
-            }
-            if (a.availablePoints > b.availablePoints) {
-                return 1;
-            }
-            return 0;
-          }
+
         
-        }
+  }
+}
+function compare(a: any, b: any) {
+    if (a.availablePoints < b.availablePoints) {
+        return -1;
+    }
+    if (a.availablePoints > b.availablePoints) {
+        return 1;
+    }
+    return 0;
   }
 export default PointsController;
 

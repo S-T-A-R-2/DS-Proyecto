@@ -49,7 +49,9 @@ const MedicinePage = () => {
       const user = resp.data.user;
       setMedicines(points);
       setUserInfo(user);
-
+      
+      console.log(points);
+      console.log(user);
       const totalMedicines = points.length;
       let totalPoints = 0;
       let usedPoints = 0;

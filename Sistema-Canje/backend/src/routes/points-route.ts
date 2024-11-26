@@ -11,6 +11,7 @@ router.post('/getBenefitInfo', async (req, res) => {
         const info = await pointsController.getBenefitInfo(req.body.username);
         res.status(201).json(info);
     } catch (error: any) {
+        console.log(error);
         res.status(500).json({message: error.message});
     }
 });
