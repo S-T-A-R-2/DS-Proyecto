@@ -1,14 +1,14 @@
 import Visitor from './interface-visitor';
 import Invoice from '../Invoice'
-class VisitorUpdate implements Visitor {
+export default class VisitorUpdate implements Visitor {
     constructor(
-        public exchangeNumber: Number,
+        public exchangeNumber: Number = 0,
     ) {}
     setExchangeNumber(number: Number) {
         this.exchangeNumber = number;
     }
-    visitInvoice(element: Invoice): void {
-        element.setState("Canjeada");
-        element.setExchangeNumber(this.exchangeNumber);
+    async visitInvoice(element: Invoice) {
+        await element.setState("Canjeada");
+        await element.setExchangeNumber(this.exchangeNumber);
     }
 }

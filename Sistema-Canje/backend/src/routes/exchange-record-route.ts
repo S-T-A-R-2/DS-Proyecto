@@ -4,6 +4,15 @@ import ExchangeRecordController from '../controllers/exchange-record-controller'
 const exchangeController = ExchangeRecordController.getInstance();
 const router = Router();
 
+router.post('/create-exchange-register', async (req, res) => {
+  try {
+      const exchanges = await exchangeController.createExchangeRecord(req.body.client, req.body.medicineId, req.body.pharmacy, req.body.invoicesUsed);
+      res.status(201).json(exchanges);
+  } catch (error: any) {
+      res.status(500).json({ message: error.message });
+  }
+});
+
 router.get('/get-all-exchanges', async (req, res) => {
     try {
         const exchanges = await exchangeController.getAllExchanges();

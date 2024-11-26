@@ -25,26 +25,25 @@ class DetailStrategy implements Strategy {
     public async getChronologicalInvoices(medicineId: string, username: string) {
         const invoices = await Invoice.find({medicineId, user: username});
         
-        const exchangeRecords = await ExchangeRecord.find({medicine: medicineId, username});
+        //const exchangeRecords = await ExchangeRecord.find({medicine: medicineId, username});
 
         const result = invoices.map((invoice) => {
-            const relatedExchange = exchangeRecords.find((exchange) =>
+            /*const relatedExchange = exchangeRecords.find((exchange) =>
                 exchange.invoicesUsed.includes(invoice.number)
-            );
+            );*/
 
-        return {
-            invoiceNumber: invoice.number,
-            invoiceDate: invoice.date,
-            pharmacy: invoice.pharmacyId,
-            usedInExchange: relatedExchange ? relatedExchange.number : null,
-        };
-    })
+            return {
+                invoiceNumber: invoice.number,
+                invoiceDate: invoice.date,
+                pharmacy: invoice.pharmacyId,
+                exchangeNumber: invoice.exchangeNumber,
+            };
+        })
 
-    return result.sort(
-        (a, b) => new Date(a.invoiceDate).getTime() - new Date(b.invoiceDate).getTime()
-      );
+        return result.sort(
+            (a, b) => new Date(a.invoiceDate).getTime() - new Date(b.invoiceDate).getTime()
+        );
     }
-
 }
 
 export default DetailStrategy;
