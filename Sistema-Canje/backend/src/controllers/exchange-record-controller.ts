@@ -1,6 +1,7 @@
 import {ExchangeRecordClass} from '../classes/ExchangeRecord'
 //import CronologicalStrategy from '../classes/CronologicalStrategy'
 import DetailStrategy from '../classes/DetailStrategy';
+import ChronologicalInvoicesStrategy from '../classes/ChronologicalInvoicesStrategy';
 import ExchangeRecord from '../models/exchange-record-model';
 import { Request, Response } from 'express';
 import Sequence from '../models/sequence-model';
@@ -88,7 +89,7 @@ class ExchangeController {
     }
 
     public async getChronologicalInvoices(medicineId: string, username: string) {
-        const strategy = new DetailStrategy();
+        const strategy = new ChronologicalInvoicesStrategy();
         return await strategy.getChronologicalInvoices(medicineId, username);
     }
 

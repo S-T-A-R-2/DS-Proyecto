@@ -56,42 +56,6 @@ export const RedeemPage = () => {
             console.log(invoicesResponse.data);
             setInvoices(invoicesResponse.data);
 
-            // const exchangeResponse = await getInvoicesByCriteria('joseUsuario', 'exchange', '1');
-            // console.log('Facturas de canje:', exchangeResponse.data.invoices);
-
-            // const invoicesResponse = await getUserInvoicesByMedicine(user?.username, medicineId);
-            // console.log(invoicesResponse.data.invoices);
-            // setInvoices(invoicesResponse.data.invoices);
-            
-            // const testInvoices: Invoice[] = [
-            //     {
-            //       number: "123",
-            //       date: "2024-01-01",
-            //       pharmacy: "Farmacia Sucre",
-            //       usedInExchange: null
-            //     },
-            //     {
-            //       number: "124",
-            //       date: "2024-01-02",
-            //       pharmacy: "Farmacia Central",
-            //       usedInExchange: "1"
-            //     },
-            //                     {
-            //       number: "124",
-            //       date: "2024-01-02",
-            //       pharmacy: "Farmacia Central",
-            //       usedInExchange: "1"
-            //     },
-            //     {
-            //       number: "125",
-            //       date: "2024-02-01",
-            //       pharmacy: "Farmacia Ahorro",
-            //       usedInExchange: null
-            //     }
-            //   ];
-            //   //setInvoices(testInvoices);
-            
-    
         } catch (error) {
             console.error('Error al cargar los datos:', error);
           }

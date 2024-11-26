@@ -1,8 +1,7 @@
 import ExchangeRecordClass from './ExchangeRecord';
 
 interface Strategy {
-
-  execute(): Promise<any>;
+  execute(medicineId?: string, username?: string): Promise<any>;
 
 }
 
