@@ -1,4 +1,4 @@
-import mongoose, {model, Document, Schema} from 'mongoose'
+import {model, Schema} from 'mongoose'
 
 const invoiceSchema = new Schema({
     number: {
@@ -28,6 +28,10 @@ const invoiceSchema = new Schema({
     user: {
       type: String,
       required: true
+    },
+    exchangeNumber: {
+        type: Number,
+        requrired: false
     }
 });
 

@@ -1,5 +1,6 @@
 import Visitor from './Visitor/interface-visitor'
 import Element from './Visitor/interface-element'
+import Invoice from '../models/invoice-model';
 export default class InvoiceClass implements  Element{
     constructor(private number: number, 
                 private date: string, 
@@ -21,6 +22,10 @@ export default class InvoiceClass implements  Element{
     }
 
     setState(state: string) {
+        Invoice.findOneAndUpdate({
+            number: this.number,
+            state: state
+        });
         this.state = state;
     }
 
@@ -52,6 +57,10 @@ export default class InvoiceClass implements  Element{
         return this._id;
     }
     setExchangeNumber(ex: Number){
+        Invoice.findOneAndUpdate({
+            number: this.number,
+            exchangeNumber: ex
+        });
         this.exchangeNumber = ex;
     }
     getExchangeNumber(){
