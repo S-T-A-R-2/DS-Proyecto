@@ -57,7 +57,7 @@ export const getAllPharmacies = () => axios.get('/get-all-pharmacies');
 
 //Points
 export const getBenefitInfo = (username: string | undefined) => axios.post('/getBenefitInfo', {username});
-export const updatePoints = (username: string | undefined, medicine: string | undefined) => axios.post('/getBenefitInfo', {username, medicine});
+export const updatePoints = (username: string | undefined, medicine: string | undefined) => axios.post('/updatePoints', {username, medicine});
 
 //Exchange Records
 export const createExchangeRegister = (client: string, medicineId: string, pharmacy: string | undefined, invoicesUsed: number[]) => axios.post('/create-exchange-register', {client, medicineId, pharmacy, invoicesUsed});

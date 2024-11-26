@@ -42,8 +42,6 @@ class ExchangeController {
             }
     
             const date = new Date().toISOString();
-            console.log("Valor de pharmacy:", pharmacy);
-
             const newRecord = new ExchangeRecord({
                 number,
                 username,
@@ -56,9 +54,9 @@ class ExchangeController {
             this.visitorUpdate.setExchangeNumber(number);
             const invoices: Array<InvoiceClass> = await this.invoiceController.getAllInvoice();
             for (const invoice of invoices) {
-                console.log(invoice);
                 if (invoicesUsed.includes(invoice.getNumber())) {
-                    await this.visitorUpdate.visitInvoice(invoice);
+                    await invoice.accept(this.visitorUpdate);
+                    //await this.visitorUpdate.visitInvoice(invoice);
                 }
             }
             await newRecord.save();
