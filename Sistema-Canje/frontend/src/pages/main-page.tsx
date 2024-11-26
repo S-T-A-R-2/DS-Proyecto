@@ -65,6 +65,12 @@ return (
             <Button onClick={() => {navigate('/register-invoice', {state: {user: user}})}}>Registrar Factura</Button>
           </div>
         )}
+        {user?.rol == 'Cliente' && (
+          <div>
+            <Button onClick={() => {navigate('/see-exchanges', {state: {user: user}})}}>Ver Registros de Canjes</Button>
+          </div>
+        )}
+
         {(user?.rol == 'Admin' || user?.rol == "Cliente") && (
           <div>
             <Button onClick={() => {navigate('/medicine')}}>Ver Medicamentos</Button>
@@ -79,14 +85,15 @@ return (
 
         {(user?.rol == 'Farmacia') && (
           <div>
-            <div>
             <Button onClick={() => {navigate('/benefit-info', {state: {user: user}})}}>Ver beneficios</Button>
-            </div>
-            <div>
-            <Button onClick={() => {navigate('/see-exchanges', {state: {user: user}})}}>Ver Registros de Canjes</Button>
-            </div>
           </div>
         )}
+        {(user?.rol == 'Farmacia') && (
+          <div>
+            <Button onClick={() => {navigate('/see-exchanges', {state: {user: user}})}}>Ver Registros de Canjes</Button>
+          </div>
+        )}
+
       </div>
 
     </div>

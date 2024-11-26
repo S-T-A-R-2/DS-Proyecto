@@ -80,9 +80,9 @@ class ExchangeController {
     }
 
     public getExchangesByUser(username:string){
-        let result = this.exchanges.filter((ex) => ex.username === username);
+        let result = this.exchanges.filter((ex) => ex.username == username);
         this.currentPool = result;
-        
+
         return result.sort((a, b) => a.date.localeCompare(b.date));
         
 

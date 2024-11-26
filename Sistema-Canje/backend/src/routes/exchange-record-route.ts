@@ -23,14 +23,12 @@ router.get('/get-all-exchanges', async (req, res) => {
 });
 
 router.get('/get-exchanges-user', async (req, res) => {
-    if (typeof req.query.username == 'string'){
       try {
-        const exchanges = await exchangeController.getExchangesByUser(req.query.username);
+        const exchanges = await exchangeController.getExchangesByUser(req.query.user as string);
         res.status(201).json(exchanges);
       } catch (error: any) {
         res.status(500).json({ message: error.message });
       }
-    }
 });
 
 router.get('/get-statistics', async(req,res) =>{

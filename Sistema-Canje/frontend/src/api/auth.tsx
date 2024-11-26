@@ -62,7 +62,9 @@ export const updatePoints = (username: string | undefined, medicine: string | un
 //Exchange Records
 export const createExchangeRegister = (client: string, medicineId: string, pharmacy: string | undefined, invoicesUsed: number[]) => axios.post('/create-exchange-register', {client, medicineId, pharmacy, invoicesUsed});
 export const getAllExchanges = () => axios.get('/get-all-exchanges');
-export const getExchangesByUser = (user: String) => axios.get('/get-exchanges-user');
+export const getExchangesByUser = (user: String) => axios.get('/get-exchanges-user', {
+  params:{user}
+});
 export const getCurrentStatistics = () => axios.get('/get-statistics');
 export const getChronologicalInvoices = (medicineId: string, username: string) => {
     return axios.get('/get-chronological-invoices', {

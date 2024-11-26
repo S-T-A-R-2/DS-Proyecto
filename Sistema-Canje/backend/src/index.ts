@@ -18,7 +18,8 @@ import cors from 'cors';
 import {connectDB} from './db'
 
 connectDB();
-
+//origin: 'http://localhost:3000',
+//origin: 'https://ds-proyecto-1.onrender.com',
 const app = express();
 app.use(cors({
     origin: 'https://ds-proyecto-1.onrender.com',
