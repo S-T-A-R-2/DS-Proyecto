@@ -77,7 +77,7 @@ return (
           </div>
         )}
 
-        {user?.rol == 'Farmacia' && (
+        {(user?.rol == 'Farmacia' || user?.rol == "Cliente") && (
           <div>
             <Button onClick={() => {navigate('/benefit-info', {state: {user: user}})}}>Ver beneficios</Button>
           </div>

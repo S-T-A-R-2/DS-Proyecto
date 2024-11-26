@@ -36,6 +36,6 @@ export class ExchangeRecordClass {
     }
 
     setInvoicesUsed(value: number[]): void {
-      this.invoicesused = value;
+      this.invoicesUsed = value;
     }
 }
