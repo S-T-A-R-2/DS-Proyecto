@@ -1,10 +1,10 @@
 # DS-Proyecto
 
 ## Equipo 4
-Gerald Calderón /
-Andrés Feng /
-Óscar Obando /
-Jose David Serrano /
+* Gerald Calderón 
+* Andrés Feng 
+* Óscar Obando 
+* Jose David Serrano 
 
 ## Comentarios
 
