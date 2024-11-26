@@ -1,7 +1,7 @@
 import ExchangeRecordClass from './ExchangeRecord';
 
 interface Strategy {
-  public execute(exchanges:ExchangeRecordClass[]);
+  public async execute();
 }
 
 export default Strategy;
