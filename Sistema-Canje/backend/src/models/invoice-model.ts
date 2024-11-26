@@ -3,6 +3,7 @@ import {model, Schema} from 'mongoose'
 const invoiceSchema = new Schema({
     number: {
         type: Number,
+        unique: true,
         required: true
     },
     date: {

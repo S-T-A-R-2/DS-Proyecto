@@ -22,10 +22,9 @@ export default class InvoiceClass implements  Element{
     }
 
     async setState(state: string) {
-        const updatedInvoice = await Invoice.findOneAndUpdate(
+        await Invoice.findOneAndUpdate(
             { number: this.number },
-            { state: state },
-            { new: true }
+            { $set: { state:state } }
         );
         this.state = state;
     }
@@ -64,10 +63,9 @@ export default class InvoiceClass implements  Element{
         return this._id;
     }
     async setExchangeNumber(ex: Number) {
-        const updatedInvoice = await Invoice.findOneAndUpdate(
+        await Invoice.findOneAndUpdate(
             { number: this.number },
-            { exchangeNumber: ex },
-            { new: true }
+            { $set: { exchangeNumber:ex } }
         );    
         this.exchangeNumber = ex;
     }
