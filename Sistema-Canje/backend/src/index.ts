@@ -12,6 +12,8 @@ import pharmacyRoutes from './routes/pharmacy-route'
 
 import pointsRoutes from './routes/points-route'
 
+import exchangeRoutes from './routes/exchange-record-route'
+
 import cors from 'cors';
 import {connectDB} from './db'
 
@@ -34,6 +36,7 @@ app.use("/api", invoiceRoutes);
 app.use("/api", medicineRoutes);
 app.use("/api", pharmacyRoutes);
 app.use("/api", pointsRoutes);
+app.use("/api", exchangeRoutes);
 
 app.listen(5000);
 
