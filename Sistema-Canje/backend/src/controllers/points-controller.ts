@@ -104,10 +104,22 @@ class PointsController {
             point = (await Points.findOne({username: username, medicineId:medicines[i]}));
             points.push(point);
         }
-        return {user: user, points: points};
-  }
 
-}
+        points.sort(compare)
+        
+        return {user: user, points: points};
+        function compare(a: any, b: any) {
+            if (a.availablePoints < b.availablePoints) {
+                return -1;
+            }
+            if (a.availablePoints > b.availablePoints) {
+                return 1;
+            }
+            return 0;
+          }
+        
+        }
+  }
 export default PointsController;
 
 

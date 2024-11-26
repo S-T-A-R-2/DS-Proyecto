@@ -18,7 +18,7 @@ interface Invoice {
     invoiceNumber: number;
     invoiceDate: string;
     pharmacy: string;
-    exchangeNumber: string | null;
+    exchangeNumber: number;
 }
 
 export const RedeemPage = () => {
@@ -71,14 +71,19 @@ export const RedeemPage = () => {
         let points_given = 0;
         let i = 0;
         while ((points_given < redeeming_points) && i < invoices.length) {
-          invoicesUsed.push(invoices[i].invoiceNumber);
-          points_given += medicine.points_given;
+          console.log(invoices[i].exchangeNumber)
+          if (invoices[i].exchangeNumber < 0) {
+            invoicesUsed.push(invoices[i].invoiceNumber);
+            points_given += medicine.points_given;
+          }
           i++;
         }
-        const numExchange = (await createExchangeRegister(client, medicineId, user?.username, invoicesUsed)).data;
+        if (points_given >= redeeming_points) {
+          const numExchange = (await createExchangeRegister(client, medicineId, user?.username, invoicesUsed)).data;
+          await updatePoints(client, medicineId);
+        }
         //updateInvoice(numExchange);
         //setInvoiceState({number:invoice.number, state:"Aprobada", username:invoice.user, medicineId:invoice.medicineId, quantity:invoice.quantity, _id:invoice._id});
-        await updatePoints(client, medicineId);
       }
 
 
@@ -116,7 +121,7 @@ export const RedeemPage = () => {
                   <p>Farmacia: {invoice.pharmacy}</p>
                   <p>
                     Estado:{' '}
-                    {invoice.exchangeNumber ? `Usado en canje #${invoice.exchangeNumber}` : 'Disponible'}
+                    {invoice.exchangeNumber >= 0 ? `Usado en canje #${invoice.exchangeNumber}` : 'Disponible'}
                   </p>
                 </li>
               ))}
