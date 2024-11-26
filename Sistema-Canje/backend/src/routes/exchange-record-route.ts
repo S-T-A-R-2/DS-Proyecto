@@ -24,6 +24,7 @@ router.get('/get-exchanges-user', async (req, res) => {
     }
 });
 
+
 router.get('/get-chronological-invoices', async (req, res) => {
   try {
     const {medicineId, username} = req.query;
@@ -34,5 +35,6 @@ router.get('/get-chronological-invoices', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 export default router;

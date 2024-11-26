@@ -1,6 +1,6 @@
 import Invoice from '../models/invoice-model';
 import Image from '../models/image-model';
-import {InvoiceClass} from '../classes/Invoice'
+import InvoiceClass from '../classes/Invoice'
 import PointsController from './points-controller';
 
 class InvoiceController {

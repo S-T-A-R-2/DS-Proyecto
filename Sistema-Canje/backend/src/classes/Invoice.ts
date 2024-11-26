@@ -1,4 +1,6 @@
-export class InvoiceClass {
+import Visitor from './Visitor/interface-visitor'
+import Element from './Visitor/interface-element'
+export default class InvoiceClass implements  Element{
     constructor(private number: number, 
                 private date: string, 
                 private pharmacyId: string,
@@ -6,7 +8,8 @@ export class InvoiceClass {
                 private quantity: number,
                 private state: string,
                 private user: string,
-                private _id: string) {
+                private _id: string,
+                private exchangeNumber: Number = -1) {
         this.number = number;
         this.date = date;
         this.pharmacyId = pharmacyId;
@@ -47,5 +50,14 @@ export class InvoiceClass {
 
     getId() {
         return this._id;
+    }
+    setExchangeNumber(ex: Number){
+        this.exchangeNumber = ex;
+    }
+    getExchangeNumber(){
+        return this.exchangeNumber;
+    }
+    accept(v: Visitor): void {
+        v.visitInvoice(this);
     }
 }

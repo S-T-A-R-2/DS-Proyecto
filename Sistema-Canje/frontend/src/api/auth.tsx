@@ -67,3 +67,4 @@ export const getChronologicalInvoices = (medicineId: string, username: string) =
       params: { medicineId, username }
     });
   };
+

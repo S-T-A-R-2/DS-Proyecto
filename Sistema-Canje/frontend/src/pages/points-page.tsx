@@ -71,6 +71,7 @@ const MedicinePage = () => {
     }
   };
 
+
   useEffect(() => {
     if (user?.rol === 'Cliente') {
       handleSearchByUser(user.username);
@@ -82,6 +83,7 @@ const MedicinePage = () => {
       handleSearchByUser(searchText);
     }
   };
+
 
   function exchange(user: any, medicine: any, farmacy: any){
     //const numExchange = createExchangeRegister(user, medicine, farmacy).data;

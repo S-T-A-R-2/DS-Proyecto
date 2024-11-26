@@ -44,6 +44,7 @@ class DetailStrategy implements Strategy {
         (a, b) => new Date(a.invoiceDate).getTime() - new Date(b.invoiceDate).getTime()
       );
     }
+
 }
 
 export default DetailStrategy;

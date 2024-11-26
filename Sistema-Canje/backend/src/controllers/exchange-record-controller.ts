@@ -57,12 +57,14 @@ class ExchangeController {
 
         return result.sort((a, b) => a.date.localeCompare(b.date));
         
+
     }
 
     public async getChronologicalInvoices(medicineId: string, username: string) {
         const strategy = new DetailStrategy();
         return await strategy.getChronologicalInvoices(medicineId, username);
     }
+
 
 
 } 
