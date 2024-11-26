@@ -22,7 +22,7 @@ class ChronologicalInvoicesStrategy implements Strategy {
                 invoiceNumber: invoice.number,
                 invoiceDate: invoice.date,
                 pharmacy: invoice.pharmacyId,
-                exchangeNumber: relatedExchange ? relatedExchange.number : null,
+                exchangeNumber: relatedExchange ? relatedExchange.number : -1,
             };
         });
 

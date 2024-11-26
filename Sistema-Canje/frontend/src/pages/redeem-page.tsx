@@ -71,7 +71,8 @@ export const RedeemPage = () => {
         let points_given = 0;
         let i = 0;
         while ((points_given < redeeming_points) && i < invoices.length) {
-          if (!invoices[i].exchangeNumber) {
+          console.log(invoices[i].exchangeNumber)
+          if (invoices[i].exchangeNumber < 0) {
             invoicesUsed.push(invoices[i].invoiceNumber);
             points_given += medicine.points_given;
           }
@@ -120,7 +121,7 @@ export const RedeemPage = () => {
                   <p>Farmacia: {invoice.pharmacy}</p>
                   <p>
                     Estado:{' '}
-                    {invoice.exchangeNumber ? `Usado en canje #${invoice.exchangeNumber}` : 'Disponible'}
+                    {invoice.exchangeNumber >= 0 ? `Usado en canje #${invoice.exchangeNumber}` : 'Disponible'}
                   </p>
                 </li>
               ))}

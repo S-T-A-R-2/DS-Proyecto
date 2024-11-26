@@ -108,18 +108,18 @@ class PointsController {
         points.sort(compare)
         
         return {user: user, points: points};
+        function compare(a: any, b: any) {
+            if (a.availablePoints < b.availablePoints) {
+                return -1;
+            }
+            if (a.availablePoints > b.availablePoints) {
+                return 1;
+            }
+            return 0;
+          }
+        
+        }
   }
-function compare(a: any, b: any) {
-    if (a.availablePoints < b.availablePoints) {
-        return -1;
-    }
-    if (a.availablePoints > b.availablePoints) {
-        return 1;
-    }
-    return 0;
-  }
-
-}
 export default PointsController;
 
 
