@@ -1,7 +1,7 @@
 import mongoose, {model, Document, Schema} from 'mongoose'
 
 const Sequence = new Schema({
-    _id: {
+    schema: {
         type: String,
         required: true,
         unique:true

@@ -17,17 +17,17 @@ class ExchangeController {
     
     public async createExchangeRecord(username: any, medicine: any, pharmacy: any, invoicesUsed: any) {
         try {
-            const sequence = await Sequence.find({_id: "ExchangeRecord"});
+            const sequence = await Sequence.find({schema: "ExchangeRecord"});
             let number = 0;
             if (sequence.length == 0) {
                 let sequence = new Sequence({
-                    _id: "ExchangeRecord",
+                    schema: "ExchangeRecord",
                     number: 0
                 });
                 sequence.save();
             } else {
                 number = sequence[0].number + 1;
-                await Sequence.findOneAndUpdate({_id: "ExchangeRecord", number: number});
+                await Sequence.findOneAndUpdate({schema: "ExchangeRecord", number: number});
             }
             const newRecord = new ExchangeRecord({
                 number,
