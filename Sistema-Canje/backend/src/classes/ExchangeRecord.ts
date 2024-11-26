@@ -4,7 +4,7 @@ export class ExchangeRecordClass {
         public username: string,
         public medicine: string,
         public date: string,
-        public pharmacy: string,
+        public pharmacy: string | undefined,
         public invoicesUsed: number[]
     ) {
         this.number = number;

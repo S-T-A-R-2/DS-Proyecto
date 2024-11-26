@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Button from '../components/Button';
 import { getBenefitInfo, getChronologicalInvoices} from '../api/auth'; //getInvoices
 import { useAuth } from '../context/auth-context';
-
+import {setInvoiceState, updatePoints, createExchangeRegister, filterMedicines} from '../api/auth';
 interface MedicineInfo {
     _id: string;
     availablePoints: number;
@@ -15,16 +15,16 @@ interface MedicineInfo {
 }
 
 interface Invoice {
-    invoiceNumber: string;
+    invoiceNumber: number;
     invoiceDate: string;
     pharmacy: string;
-    usedInExchange: string | null;
+    exchangeNumber: string | null;
 }
 
 export const RedeemPage = () => {
-    //const { user } = useAuth();
+    const { user } = useAuth();
     const location = useLocation();
-    const user = location.state?.user;
+    const cliente = location.state?.user;
     const {medicineId} = useParams();
     const [medicine, setMedicine] = useState<MedicineInfo | null>(null);
     const [invoices, setInvoices] = useState<Invoice[]>([]);    
@@ -36,7 +36,7 @@ export const RedeemPage = () => {
 
         const fetchData = async () => {
           try {
-            const resp = await getBenefitInfo(user); 
+            const resp = await getBenefitInfo(cliente); 
             const points = resp.data.points;
     
             const selectedMedicine = points.find((item: MedicineInfo) => item.medicineId === medicineId);
@@ -47,12 +47,12 @@ export const RedeemPage = () => {
             setMedicine(selectedMedicine);
             //console.log(selectedMedicine);
     
-            if (!user) {
+            if (!cliente) {
                 console.error('User is null or undefined.');
                 return;
               }
 
-            const invoicesResponse = await getChronologicalInvoices(medicineId as string, user);
+            const invoicesResponse = await getChronologicalInvoices(medicineId as string, cliente);
             console.log(invoicesResponse.data);
             setInvoices(invoicesResponse.data);
 
@@ -100,7 +100,22 @@ export const RedeemPage = () => {
         fetchData();
       }, [medicineId]);    
 
-      const handleRedeem = async () => {}
+      const handleRedeem = async (client: string, medicineId: string) => {
+        const medicine = (await filterMedicines(medicineId, "true")).data[0];
+        const redeeming_points = medicine.redeeming_points;
+        let invoicesUsed:number[] = [];
+        let points_given = 0;
+        let i = 0;
+        while ((points_given < redeeming_points) && i < invoices.length) {
+          invoicesUsed.push(invoices[i].invoiceNumber);
+          points_given += medicine.points_given;
+          i++;
+        }
+        const numExchange = (await createExchangeRegister(client, medicineId, user?.username, invoicesUsed)).data;
+        //updateInvoice(numExchange);
+        //setInvoiceState({number:invoice.number, state:"Aprobada", username:invoice.user, medicineId:invoice.medicineId, quantity:invoice.quantity, _id:invoice._id});
+        updatePoints(client, medicineId);
+      }
 
 
 
@@ -119,7 +134,7 @@ export const RedeemPage = () => {
         )}
 
         {medicine && medicine.availablePoints >= medicine.totalPoints - medicine.usedPoints ? (
-          <Button variant="primary" onClick={handleRedeem}>
+          <Button variant="primary" onClick={e => handleRedeem(medicine.username, medicine.medicineId)}>
             Confirmar Canje
           </Button>
         ) : (
@@ -137,7 +152,7 @@ export const RedeemPage = () => {
                   <p>Farmacia: {invoice.pharmacy}</p>
                   <p>
                     Estado:{' '}
-                    {invoice.usedInExchange ? `Usado en canje #${invoice.usedInExchange}` : 'Disponible'}
+                    {invoice.exchangeNumber ? `Usado en canje #${invoice.exchangeNumber}` : 'Disponible'}
                   </p>
                 </li>
               ))}

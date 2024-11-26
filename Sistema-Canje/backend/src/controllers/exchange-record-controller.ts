@@ -5,6 +5,7 @@ import ChronologicalInvoicesStrategy from '../classes/ChronologicalInvoicesStrat
 import ExchangeRecord from '../models/exchange-record-model';
 import { Request, Response } from 'express';
 import Sequence from '../models/sequence-model';
+import VisitorUpdate from '../classes/Visitor/visitor-update';
 import InvoiceController from './invoice-controller';
 import GetRegisterVisitor from '../classes/Visitor/GetRegistersVisitor';
 import InvoiceClass from '../classes/Invoice'
@@ -12,6 +13,8 @@ import InvoiceClass from '../classes/Invoice'
 class ExchangeController {
     private static instance: ExchangeController;
     private exchanges: Array<ExchangeRecordClass> = new Array();
+    private visitorUpdate = new VisitorUpdate();
+    private invoiceController = InvoiceController.getInstance();
     private currentPool: Array<ExchangeRecordClass> = new Array();
 
     public static getInstance(): ExchangeController {
@@ -20,32 +23,50 @@ class ExchangeController {
         }
         return ExchangeController.instance;
     }
-    
-    public async createExchangeRecord(username: any, medicine: any, pharmacy: any, invoicesUsed: any) {
+    public async createExchangeRecord(username: string, medicine: string, pharmacy: string | undefined, invoicesUsed: number[]) {
         try {
-            const sequence = await Sequence.find({schema: "ExchangeRecord"});
+            const sequence = await Sequence.find({ schema: "ExchangeRecord" });
             let number = 0;
-            if (sequence.length == 0) {
-                let sequence = new Sequence({
+    
+            if (sequence.length === 0) {
+                const newSequence = new Sequence({
                     schema: "ExchangeRecord",
                     number: 0
                 });
-                sequence.save();
+                await newSequence.save();
             } else {
                 number = sequence[0].number + 1;
-                await Sequence.findOneAndUpdate({schema: "ExchangeRecord", number: number});
+                await Sequence.findOneAndUpdate(
+                    { schema: "ExchangeRecord" },
+                    { $set: { number } }
+                );
             }
+    
+            const date = new Date().toISOString();
+            console.log("Valor de pharmacy:", pharmacy);
+
             const newRecord = new ExchangeRecord({
                 number,
                 username,
                 medicine,
+                date,
                 pharmacy,
-                date: new Date(), 
                 invoicesUsed,
             });
+    
+            this.visitorUpdate.setExchangeNumber(number);
+            const invoices: Array<InvoiceClass> = await this.invoiceController.getAllInvoice();
+            for (const invoice of invoices) {
+                console.log(invoice);
+                if (invoicesUsed.includes(invoice.getNumber())) {
+                    await this.visitorUpdate.visitInvoice(invoice);
+                }
+            }
             await newRecord.save();
+            console.log("Registro creado exitosamente.");
         } catch (error: any) {
-            throw new Error("No se pudo obtener las farmacias. " + error.message);
+            console.error("Error al crear el registro:", error);
+            throw new Error("No se pudo crear el registro: " + error.message);
         }
     }
 

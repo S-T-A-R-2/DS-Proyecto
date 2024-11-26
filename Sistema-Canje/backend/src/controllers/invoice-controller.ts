@@ -46,7 +46,7 @@ class InvoiceController {
         throw new Error("No se pudo crear la factura. " + error.message);
       }
   }
-  public async getAllInvoice(){
+  /*public async getAllInvoice(){
     let add: boolean;
     try {
       if (this.invoicesArray.length == 0) {
@@ -57,12 +57,46 @@ class InvoiceController {
             this.invoicesArray.push(invoiceObject);
         }
 
+        return this.invoicesArray;
+      } else {
+        return this.invoicesArray;
+      }
+      return this.invoicesArray;
+    } catch (error: any) {
+      throw new Error("No se pudo obtener las facturas. " + error.message);
+    }
+  }*/
+  public async getAllInvoice() {
+    try {
+      if (this.invoicesArray.length === 0) {
+        const invoices = await Invoice.find({});
+  
+        // Convierte los IDs de `this.invoicesArray` a un conjunto para búsquedas rápidas
+        const existingIds = new Set(this.invoicesArray.map((invoice) => invoice.getId()));
+  
+        for (const invoice of invoices) {
+          // Solo agrega si el ID no está en `existingIds`
+          if (!existingIds.has(invoice._id.toString())) {
+            const invoiceObject = new InvoiceClass(
+              invoice.number,
+              invoice.date,
+              invoice.pharmacyId,
+              invoice.medicineId,
+              invoice.quantity,
+              invoice.state,
+              invoice.user,
+              invoice._id.toString()
+            );
+            this.invoicesArray.push(invoiceObject);
+          }
+        }
       }
       return this.invoicesArray;
     } catch (error: any) {
       throw new Error("No se pudo obtener las facturas. " + error.message);
     }
   }
+    
   public async setInvoiceState (number: Number, state: string, username: String, medicine: String, quantity: number, _id: string) {
     try{
       const newInvoice = await Invoice.findOneAndUpdate(
