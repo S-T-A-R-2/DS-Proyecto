@@ -18,9 +18,11 @@ export class ExchangeRecordClass {
     getNumber() {
       return this.number;
     }
+
     getusername() {
       return this.username;
     }
+
 }
 
 export default ExchangeRecordClass;
