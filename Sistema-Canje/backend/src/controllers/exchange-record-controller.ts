@@ -2,6 +2,7 @@ import ExchangeRecord from '../models/exchange-record-model';
 import {ExchangeRecordClass} from '../classes/ExchangeRecord'
 import CronologicalStrategy from '../classes/CronologicalStrategy'
 
+
 class ExchangeRecordController {
 
   private static instance: ExchangeRecordController;
