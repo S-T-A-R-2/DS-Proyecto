@@ -36,7 +36,7 @@ class InvoiceController {
           user
         })
         const idInvoice = newInvoice._id.toString();
-        const invoiceObject = new InvoiceClass(number, date, pharmacyId, medicineId, quantity, state, user, newInvoice._id.toString());
+        const invoiceObject = new InvoiceClass(number, date, pharmacyId, medicineId, quantity, state, user, newInvoice._id.toString(), -1);
         this.invoicesArray.push(invoiceObject);
         const newImage = new Image({idInvoice, data});
         await newInvoice.save();
@@ -85,7 +85,8 @@ class InvoiceController {
               invoice.quantity,
               invoice.state,
               invoice.user,
-              invoice._id.toString()
+              invoice._id.toString(),
+              invoice?.exchangeNumber
             );
             this.invoicesArray.push(invoiceObject);
           }
