@@ -18,7 +18,7 @@ interface Invoice {
     invoiceNumber: number;
     invoiceDate: string;
     pharmacy: string;
-    exchangeNumber: string | null;
+    exchangeNumber: number;
 }
 
 export const RedeemPage = () => {
