@@ -71,8 +71,10 @@ export const RedeemPage = () => {
         let points_given = 0;
         let i = 0;
         while ((points_given < redeeming_points) && i < invoices.length) {
-          invoicesUsed.push(invoices[i].invoiceNumber);
-          points_given += medicine.points_given;
+          if (!invoices[i].exchangeNumber) {
+            invoicesUsed.push(invoices[i].invoiceNumber);
+            points_given += medicine.points_given;
+          }
           i++;
         }
         if (points_given >= redeeming_points) {
