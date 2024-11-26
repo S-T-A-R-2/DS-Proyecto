@@ -15,14 +15,17 @@ export class ExchangeRecordClass {
         this.invoicesUsed = invoicesUsed;
     }
 
-    getNumber() {
+    public getNumber() {
       return this.number;
     }
-
-    getusername() {
+    public getUsername() {
       return this.username;
     }
 
+    public getInvoicesUsed() {
+      return this.invoicesUsed;
+    }
+   
 }
 
 export default ExchangeRecordClass;
