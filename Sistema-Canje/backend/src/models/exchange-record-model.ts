@@ -22,7 +22,7 @@ const ExchangeRecord = new Schema({
       type:String,
       required:true
     },
-    invoicesUsed {
+    invoicesUsed: {
       type: [Number],
       required:true
     }

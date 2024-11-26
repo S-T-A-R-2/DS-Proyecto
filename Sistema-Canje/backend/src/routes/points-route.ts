@@ -15,4 +15,13 @@ router.post('/getBenefitInfo', async (req, res) => {
     }
 });
 
+router.post('/updatePoints', async (req, res) => {
+    try {
+        const info = await pointsController.updatePoints(req.body.username, req.body.medicine, -1);
+        res.status(201).json(info);
+    } catch (error: any) {
+        res.status(500).json({message: error.message});
+    }
+});
+
 export default router;

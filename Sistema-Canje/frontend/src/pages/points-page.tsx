@@ -5,7 +5,7 @@ import PointsMedicine from '../components/PointsMedicine';
 import { getBenefitInfo } from '../api/auth';
 import { useAuth } from '../context/auth-context';
 import {useNavigate} from 'react-router-dom';
-
+import {setInvoiceState, updatePoints} from '../api/auth';
 interface UserInfo {
   email: string;
   name: string;
@@ -71,6 +71,13 @@ const MedicinePage = () => {
     }
   };
 
+  function exchange(user: any, medicine: any, farmacy: any){
+    //const numExchange = createExchangeRegister(user, medicine, farmacy).data;
+    //updateInvoice(numExchange);
+    //setInvoiceState({number:invoice.number, state:"Aprobada", username:invoice.user, medicineId:invoice.medicineId, quantity:invoice.quantity, _id:invoice._id});
+    updatePoints(user.username, medicine.id);
+  }
+
 
   return (
     <div className="min-h-screen bg-zinc-900 text-white">
@@ -133,6 +140,7 @@ const MedicinePage = () => {
         {/* Close Button */}
         <div className="absolute bottom-4 right-4">
             <Button type="button" onClick={()=>navigate('/main')}>Cerrar</Button>
+            <Button type="button" onClick={()=>navigate('/main')}>Canjear</Button>
           </div>
       </div>
     </div>
