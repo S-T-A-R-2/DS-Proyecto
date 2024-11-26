@@ -21,8 +21,8 @@ export default class InvoiceClass implements  Element{
         this._id = _id;
     }
 
-    setState(state: string) {
-        Invoice.findOneAndUpdate({
+    async setState(state: string) {
+        await Invoice.findOneAndUpdate({
             number: this.number,
             state: state
         });
@@ -56,8 +56,8 @@ export default class InvoiceClass implements  Element{
     getId() {
         return this._id;
     }
-    setExchangeNumber(ex: Number){
-        Invoice.findOneAndUpdate({
+    async setExchangeNumber(ex: Number){
+        await Invoice.findOneAndUpdate({
             number: this.number,
             exchangeNumber: ex
         });
