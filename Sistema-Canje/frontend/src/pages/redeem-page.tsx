@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Button from '../components/Button';
 import { getBenefitInfo, getChronologicalInvoices} from '../api/auth'; //getInvoices
 import { useAuth } from '../context/auth-context';
@@ -22,7 +22,9 @@ interface Invoice {
 }
 
 export const RedeemPage = () => {
-    const { user } = useAuth();
+    //const { user } = useAuth();
+    const location = useLocation();
+    const user = location.state?.user;
     const {medicineId} = useParams();
     const [medicine, setMedicine] = useState<MedicineInfo | null>(null);
     const [invoices, setInvoices] = useState<Invoice[]>([]);    
@@ -34,7 +36,7 @@ export const RedeemPage = () => {
 
         const fetchData = async () => {
           try {
-            const resp = await getBenefitInfo(user?.username); 
+            const resp = await getBenefitInfo(user); 
             const points = resp.data.points;
     
             const selectedMedicine = points.find((item: MedicineInfo) => item.medicineId === medicineId);
@@ -45,12 +47,12 @@ export const RedeemPage = () => {
             setMedicine(selectedMedicine);
             //console.log(selectedMedicine);
     
-            if (!user?.username) {
+            if (!user) {
                 console.error('User is null or undefined.');
                 return;
               }
 
-            const invoicesResponse = await getChronologicalInvoices(medicineId as string, user?.username);
+            const invoicesResponse = await getChronologicalInvoices(medicineId as string, user);
             console.log(invoicesResponse.data);
             setInvoices(invoicesResponse.data);
 

@@ -18,17 +18,15 @@ const stats = [
   
   interface Data {
     user: string
-    role: string
     medicines: MedicineInfo[];
   }
 
 
-  export default function PointsMedicine({user, role, medicines}: Data) {
+  export default function PointsMedicine({user, medicines}: Data) {
     const navigate = useNavigate();
     const handleRedirect = (medicineId: string) => {
-      if (role === 'Cliente') {
-        navigate(`/redeem/${medicineId}`);
-      }
+        navigate(`/redeem/${medicineId}`, {state: {user}});
+      
     }
 
     return (
