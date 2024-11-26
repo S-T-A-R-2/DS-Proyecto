@@ -75,10 +75,12 @@ export const RedeemPage = () => {
           points_given += medicine.points_given;
           i++;
         }
-        const numExchange = (await createExchangeRegister(client, medicineId, user?.username, invoicesUsed)).data;
+        if (points_given >= redeeming_points) {
+          const numExchange = (await createExchangeRegister(client, medicineId, user?.username, invoicesUsed)).data;
+          await updatePoints(client, medicineId);
+        }
         //updateInvoice(numExchange);
         //setInvoiceState({number:invoice.number, state:"Aprobada", username:invoice.user, medicineId:invoice.medicineId, quantity:invoice.quantity, _id:invoice._id});
-        await updatePoints(client, medicineId);
       }
 
 
