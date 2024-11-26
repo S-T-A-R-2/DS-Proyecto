@@ -15,27 +15,14 @@ export class ExchangeRecordClass {
         this.invoicesUsed = invoicesUsed;
     }
 
-    setNumber(value: number): void {
-      this.number = value;
+    getNumber() {
+      return this.number;
     }
 
-    setUsername(value: string): void {
-      this.username = value;
+    getusername() {
+      return this.username;
     }
 
-    setMedicine(value: string): void {
-      this.medicine = value;
-    }
-
-    setDate(value: string): void {
-      this.date = value;
-    }
-
-    setPharmacy(value: string): void {
-      this.pharmacy = value;
-    }
-
-    setInvoicesUsed(value: number[]): void {
-      this.invoicesused = value;
-    }
 }
+
+export default ExchangeRecordClass;

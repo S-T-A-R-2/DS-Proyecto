@@ -1,5 +1,7 @@
-import ExchangeRecord from '../models/exchange-record-model.ts';
-import {ExchangeRecordClass} from '../classes/ExchangeRecord.ts'
+import ExchangeRecord from '../models/exchange-record-model';
+import {ExchangeRecordClass} from '../classes/ExchangeRecord'
+import CronologicalStrategy from '../classes/CronologicalStrategy'
+
 
 class ExchangeRecordController {
 
@@ -13,31 +15,31 @@ class ExchangeRecordController {
     return ExchangeRecordController.instance;
   }
 
-  public createExchangeRecord(r) {};
-
-  public getAllExchanges(){
+  public async getAllExchanges(){
     if (this.exchanges.length == 0){
         const exchanges = await ExchangeRecord.find({});
-        for (let i in exchanges) {
-          add = true;
-          for (let i in this.exchanges) {
-            if (this.exchanges[i].getId() === exchanges[i]._id.toString()) {
-              add = false;
-            }
-          }
-          if (add) {
-            const object = new ExchangeRecordClass(exchanges[i].number,
-                                                    exchanges[i].username,
-                                                    exchanges[i].medicine,
-                                                    exchanges[i].date,
-                                                    exchanges[i].pharmacy,
-                                                    exchanges[i].invoicesUsed);
+        for (let exchange of exchanges) {
+            const object = new ExchangeRecordClass(
+                exchange.number,
+                exchange.username,
+                exchange.medicine,
+                exchange.date,
+                exchange.pharmacy,
+                exchange.invoicesUsed
+            );
             this.exchanges.push(object);
-          }
- 
+        }
     }
     return this.exchanges;
+  }
 
+  public getExchangesByUser(username:string){
+      let crono = new CronologicalStrategy();  
+      let ordered =  crono.execute(this.exchanges);
+      let result = ordered.filter((ex) => ex.username === username);
+
+      return result;
+      
   }
 }
 
