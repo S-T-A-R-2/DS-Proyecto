@@ -1,7 +1,14 @@
 import Visitor from './interface-visitor';
 import Invoice from '../Invoice'
 class VisitorUpdate implements Visitor {
+    constructor(
+        public exchangeNumber: Number,
+    ) {}
+    setExchangeNumber(number: Number) {
+        this.exchangeNumber = number;
+    }
     visitInvoice(element: Invoice): void {
-      console.log(`Visitando invoice: ${element.getState()}`);
+        element.setState("Canjeado");
+        element.setExchangeNumber(this.exchangeNumber);
     }
 }

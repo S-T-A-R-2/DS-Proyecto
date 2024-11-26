@@ -8,7 +8,8 @@ export default class InvoiceClass implements  Element{
                 private quantity: number,
                 private state: string,
                 private user: string,
-                private _id: string) {
+                private _id: string,
+                private exchangeNumber: Number = -1) {
         this.number = number;
         this.date = date;
         this.pharmacyId = pharmacyId;
@@ -49,6 +50,12 @@ export default class InvoiceClass implements  Element{
 
     getId() {
         return this._id;
+    }
+    setExchangeNumber(ex: Number){
+        this.exchangeNumber = ex;
+    }
+    getExchangeNumber(){
+        return this.exchangeNumber;
     }
     accept(v: Visitor): void {
         v.visitInvoice(this);
