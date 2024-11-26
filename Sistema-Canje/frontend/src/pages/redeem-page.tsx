@@ -78,7 +78,7 @@ export const RedeemPage = () => {
         const numExchange = (await createExchangeRegister(client, medicineId, user?.username, invoicesUsed)).data;
         //updateInvoice(numExchange);
         //setInvoiceState({number:invoice.number, state:"Aprobada", username:invoice.user, medicineId:invoice.medicineId, quantity:invoice.quantity, _id:invoice._id});
-        updatePoints(client, medicineId);
+        await updatePoints(client, medicineId);
       }
 
 

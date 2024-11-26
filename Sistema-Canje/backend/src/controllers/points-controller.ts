@@ -28,10 +28,25 @@ class PointsController {
             const medicineController = MedicineController.getInstance();
             const medicineObject = await medicineController.getMedicine((medicine as string));
 
-            console.log(points);
             if (!medicineObject) {
                 throw new Error("No se pudo obtener el medicamento");
             }
+
+            if (quantity < 0) {
+                await Points.findOneAndUpdate(
+                    { // Criterios de búsqueda
+                        username: points[0].username,
+                        medicineId: points[0].medicineId,
+                    },
+                    { // Campos a actualizar
+                        $inc: {
+                            availablePoints: -medicineObject.redeeming_points, // Resta puntos disponibles
+                            usedPoints: medicineObject.redeeming_points        // Suma puntos usados
+                        }
+                    }
+                );
+            } else {
+
             if (points.length == 0) {//Si el usuario no ha acumulado puntos en un medicamento especifico
                 const medicineId = medicineObject?.name;
                 const medicineDescription = medicineObject?.description;
@@ -46,29 +61,26 @@ class PointsController {
                 });
                 await newPoints.save();
             } else {
-                if (quantity < 0) {
-                    await Points.findOneAndUpdate({
-                        username: points[0].username,
-                        medicineId: points[0].medicineId,
-                        availablePoints: points[0].availablePoints - medicineObject.redeeming_points,
-                        usedPoints: points[0].usedPoints + medicineObject.redeeming_points
-                    });
-                } else {
-                    const totalPoints = points[0].totalPoints;
-                    const availablePoints = points[0].availablePoints;
-                    if (medicineObject?.points_given) {
-                        const accumulatedTotalPoints = totalPoints + (medicineObject?.points_given * quantity);
-                        const accumulatedAvailablePoints = availablePoints + (medicineObject?.points_given * quantity);
-                        await Points.findOneAndUpdate({
+                const totalPoints = points[0].totalPoints;
+                const availablePoints = points[0].availablePoints;
+                if (medicineObject?.points_given) {
+                    const accumulatedTotalPoints = totalPoints + (medicineObject?.points_given * quantity);
+                    const accumulatedAvailablePoints = availablePoints + (medicineObject?.points_given * quantity);
+                    await Points.findOneAndUpdate(
+                        { // Criterios de búsqueda
                             username: points[0].username,
                             medicineId: points[0].medicineId,
+                        },
+                        { // Campos a actualizar
                             totalPoints: accumulatedTotalPoints,
                             availablePoints: accumulatedAvailablePoints
-                        });
-                    } else {
-                        throw new Error("No se pudo actualizar los puntos");
-                    }
+                        },
+                        { new: true } // Opcional: Devuelve el documento actualizado
+                    );                    
+                } else {
+                    throw new Error("No se pudo actualizar los puntos");
                 }
+            }
             }
         } catch (error:any) {
             throw new Error("No se pudo actualizar la factura o los puntos. " + error.message);
@@ -89,10 +101,9 @@ class PointsController {
 
         //Informacion de puntos por cada medicamento
         for (let i = 0; i < medicines.length; i++) {
-            point = await Points.findOne({username: username, medicineId:medicines[i]});
+            point = (await Points.findOne({username: username, medicineId:medicines[i]}));
             points.push(point);
         }
-
         return {user: user, points: points};
   }
 

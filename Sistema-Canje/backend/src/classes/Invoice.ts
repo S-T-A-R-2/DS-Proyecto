@@ -22,12 +22,14 @@ export default class InvoiceClass implements  Element{
     }
 
     async setState(state: string) {
-        await Invoice.findOneAndUpdate({
-            number: this.number,
-            state: state
-        });
+        const updatedInvoice = await Invoice.findOneAndUpdate(
+            { number: this.number },
+            { state: state },
+            { new: true }
+        );
         this.state = state;
     }
+    
 
     getUser() {
         return this.user;
@@ -60,13 +62,15 @@ export default class InvoiceClass implements  Element{
     getId() {
         return this._id;
     }
-    async setExchangeNumber(ex: Number){
-        await Invoice.findOneAndUpdate({
-            number: this.number,
-            exchangeNumber: ex
-        });
+    async setExchangeNumber(ex: Number) {
+        const updatedInvoice = await Invoice.findOneAndUpdate(
+            { number: this.number },
+            { exchangeNumber: ex },
+            { new: true }
+        );    
         this.exchangeNumber = ex;
     }
+    
     getExchangeNumber(){
         return this.exchangeNumber;
     }
