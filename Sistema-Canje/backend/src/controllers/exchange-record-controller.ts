@@ -22,7 +22,7 @@ class ExchangeController {
         }
         return ExchangeController.instance;
     }
-    public async createExchangeRecord(username: string, medicine: string, pharmacy: string, invoicesUsed: number[]) {
+    public async createExchangeRecord(username: string, medicine: string, pharmacy: string | undefined, invoicesUsed: number[]) {
         try {
             const sequence = await Sequence.find({ schema: "ExchangeRecord" });
             let number = 0;
@@ -56,6 +56,7 @@ class ExchangeController {
             this.visitorUpdate.setExchangeNumber(number);
             const invoices: Array<InvoiceClass> = await this.invoiceController.getAllInvoice();
             for (const invoice of invoices) {
+                console.log(invoice);
                 if (invoicesUsed.includes(invoice.getNumber())) {
                     await this.visitorUpdate.visitInvoice(invoice);
                 }

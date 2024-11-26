@@ -60,7 +60,7 @@ export const getBenefitInfo = (username: string | undefined) => axios.post('/get
 export const updatePoints = (username: string | undefined, medicine: string | undefined) => axios.post('/getBenefitInfo', {username, medicine});
 
 //Exchange Records
-export const createExchangeRegister = (client: string, medicineId: string, pharmacy: string, invoicesUsed: number[]) => axios.post('/create-exchange-register', {client, medicineId, pharmacy, invoicesUsed});
+export const createExchangeRegister = (client: string, medicineId: string, pharmacy: string | undefined, invoicesUsed: number[]) => axios.post('/create-exchange-register', {client, medicineId, pharmacy, invoicesUsed});
 export const getAllExchanges = () => axios.get('/get-all-exchanges');
 export const getExchangesByUser = (user: String) => axios.get('/get-exchanges-user');
 export const getCurrentStatistics = () => axios.get('/get-statistics');

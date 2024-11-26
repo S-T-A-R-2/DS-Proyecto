@@ -22,9 +22,9 @@ interface Invoice {
 }
 
 export const RedeemPage = () => {
-    //const { user } = useAuth();
+    const { user } = useAuth();
     const location = useLocation();
-    const user = location.state?.user;
+    const cliente = location.state?.user;
     const {medicineId} = useParams();
     const [medicine, setMedicine] = useState<MedicineInfo | null>(null);
     const [invoices, setInvoices] = useState<Invoice[]>([]);    
@@ -36,7 +36,7 @@ export const RedeemPage = () => {
 
         const fetchData = async () => {
           try {
-            const resp = await getBenefitInfo(user); 
+            const resp = await getBenefitInfo(cliente); 
             const points = resp.data.points;
     
             const selectedMedicine = points.find((item: MedicineInfo) => item.medicineId === medicineId);
@@ -47,12 +47,12 @@ export const RedeemPage = () => {
             setMedicine(selectedMedicine);
             //console.log(selectedMedicine);
     
-            if (!user) {
+            if (!cliente) {
                 console.error('User is null or undefined.');
                 return;
               }
 
-            const invoicesResponse = await getChronologicalInvoices(medicineId as string, user);
+            const invoicesResponse = await getChronologicalInvoices(medicineId as string, cliente);
             console.log(invoicesResponse.data);
             setInvoices(invoicesResponse.data);
 
@@ -111,9 +111,7 @@ export const RedeemPage = () => {
           points_given += medicine.points_given;
           i++;
         }
-        console.log("++++++++++++++")
-        console.log(user.username);
-        const numExchange = (await createExchangeRegister(client, medicineId, user.username, invoicesUsed)).data;
+        const numExchange = (await createExchangeRegister(client, medicineId, user?.username, invoicesUsed)).data;
         //updateInvoice(numExchange);
         //setInvoiceState({number:invoice.number, state:"Aprobada", username:invoice.user, medicineId:invoice.medicineId, quantity:invoice.quantity, _id:invoice._id});
         updatePoints(client, medicineId);
