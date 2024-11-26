@@ -7,10 +7,10 @@ export default class InvoiceClass implements  Element{
                 private pharmacyId: string,
                 private medicineId: string,
                 private quantity: number,
-                private state: string,
+                private state: string | undefined,
                 private user: string,
                 private _id: string,
-                private exchangeNumber: Number = -1) {
+                private exchangeNumber: number | null | undefined,) {
         this.number = number;
         this.date = date;
         this.pharmacyId = pharmacyId;
@@ -19,17 +19,8 @@ export default class InvoiceClass implements  Element{
         this.state = state;
         this.user = user;
         this._id = _id;
+        this.exchangeNumber = -1;
     }
-
-    async setState(state: string) {
-        await Invoice.findOneAndUpdate(
-            { number: this.number },
-            { $set: { state:state } }
-        );
-        this.state = state;
-    }
-    
-    
 
     getUser() {
         return this.user;
@@ -62,14 +53,25 @@ export default class InvoiceClass implements  Element{
     getId() {
         return this._id;
     }
-    async setExchangeNumber(ex: Number) {
-        await Invoice.findOneAndUpdate(
+    
+    async setState(state: string) {
+        const result = await Invoice.findOneAndUpdate(
             { number: this.number },
-            { $set: { exchangeNumber:ex } }
-        );    
-        this.exchangeNumber = ex;
+            { $set: { state: state } },
+            { new: true } // Esto retorna el documento actualizado
+        );
+        this.state = result?.state; // Asegúrate de que el estado se refleje correctamente
     }
     
+    async setExchangeNumber(ex: Number) {
+        const result = await Invoice.findOneAndUpdate(
+            { number: this.number },
+            { $set: { exchangeNumber: ex } },
+            { new: true }
+        );
+        this.exchangeNumber = result?.exchangeNumber;
+    }    
+
     getExchangeNumber(){
         return this.exchangeNumber;
     }
