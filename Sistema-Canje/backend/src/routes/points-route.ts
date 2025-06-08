@@ -15,10 +15,17 @@ router.post('/getBenefitInfo', async (req, res) => {
         res.status(500).json({message: error.message});
     }
 });
-
+router.post('/updatePointsTest', async (req, res) => {
+    try {
+        const info = await pointsController.updatePointsTest(req.body.username, req.body.medicine, -1, req.body.count);
+        res.status(201).json(info);
+    } catch (error: any) {
+        res.status(500).json({message: error.message});
+    }
+});
 router.post('/updatePoints', async (req, res) => {
     try {
-        const info = await pointsController.updatePoints(req.body.username, req.body.medicine, -1);
+        const info = await pointsController.updatePoints(req.body.username, req.body.medicine, req.body.quantity);
         res.status(201).json(info);
     } catch (error: any) {
         res.status(500).json({message: error.message});

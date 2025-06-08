@@ -92,8 +92,24 @@ class ExchangeController {
         const strategy = new ChronologicalInvoicesStrategy();
         return await strategy.getChronologicalInvoices(medicineId, username);
     }
+    public async getCurrentStatisticsTest(count: any) {
+        await this.getAllExchanges();
+        let answer = 0;
+        let countTemp = count;
+        while (countTemp>0) {
+          countTemp--;
+          //answer += await this.getCurrentStatistics();
+        }
+        console.log(`Total: ${answer/count}`);
+    }
 
+    private a = false;
     public async getCurrentStatistics(){
+        if (!this.a) {
+            this.a = true;
+            await this.getAllExchanges();
+        }
+        const startTime = performance.now();
         let invoicesControl = InvoiceController.getInstance(); 
         let visitor = new GetRegisterVisitor(); 
         const invoices:InvoiceClass[] = await invoicesControl.getAllInvoice();
@@ -107,7 +123,11 @@ class ExchangeController {
             }
         }
 
-        return visitor.getStatistics();
+        const r = visitor.getStatistics();
+        const endTime = performance.now();
+        console.log(12/(endTime-startTime));
+        //return (12)/(endTime-startTime);
+        //return r;
     }
 
 

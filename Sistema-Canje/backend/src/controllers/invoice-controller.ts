@@ -133,7 +133,18 @@ class InvoiceController {
     return medicines;
   }
 
+  public async filterInvoicesTest(stateFilter: any, dateRangeFilter: any, searchInvoiceNumber: any, userFilter: any, count: any) {
+    let answer = 0;
+    let countTemp = count;
+    while (countTemp>0) {
+      countTemp--;
+     // answer += await this.filterInvoices(stateFilter, dateRangeFilter, searchInvoiceNumber, userFilter);
+    }
+    console.log(`Total: ${answer/count}`);
+  }
+
   public async filterInvoices(stateFilter: any, dateRangeFilter: any, searchInvoiceNumber: any, userFilter: any){
+    const startTime = performance.now();
     const query: any = {};
     try {
       if (userFilter && userFilter.trim() !== ""){
@@ -175,6 +186,7 @@ class InvoiceController {
       }
       
       const invoices = await Invoice.find(query);
+      const endTime = performance.now();
       return invoices;
     } catch (error:any) {
       throw new Error("Error inesperado: " + error.message);

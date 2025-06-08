@@ -30,7 +30,14 @@ router.get('/get-exchanges-user', async (req, res) => {
         res.status(500).json({ message: error.message });
       }
 });
-
+router.get('/get-statistics-test', async(req,res) =>{
+  try {
+      const stats = await exchangeController.getCurrentStatisticsTest(req.body.count);
+      res.status(201).json(stats);
+  } catch (err:any) {
+        res.status(500).json({ message: err.message });
+  }
+});
 router.get('/get-statistics', async(req,res) =>{
   try {
       const stats = await exchangeController.getCurrentStatistics();

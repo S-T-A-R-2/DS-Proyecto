@@ -18,10 +18,22 @@ class PointsController {
         return PointsController.instance;
     }
 
+    public async updatePointsTest(username: String, medicine: String, quantity: number, count: any) {
+        let answer = 0;
+        let countTemp = count;
+        while (countTemp>0) {
+          countTemp--;
+          answer += await this.updatePoints(username, medicine, quantity);
+        }
+        console.log(`Total: ${answer/count}`);
+      }
+    
+
     public async updatePoints(username: String, medicine: String, quantity: number) {
         /*---------------------------------------------------------------------
       ----------------CONTROLADOR DE PUNTOS?????----------------------------
       ---------------------------------------------------------------------*/
+      const startTime = performance.now();
         try {
 
             const points = await Points.find({username: username, medicineId: medicine});
@@ -82,12 +94,26 @@ class PointsController {
                 }
             }
             }
+            const endTime = performance.now();
+            console.log(5/(endTime-startTime));
+            return 5/(endTime-startTime);
         } catch (error:any) {
             throw new Error("No se pudo actualizar la factura o los puntos. " + error.message);
         }
     }
 
+    public async getBenefitInfoTest(count:any) {
+        let answer = 0;
+        let countTemp = count;
+        while (countTemp>0) {
+          countTemp--;
+          //answer += await this.getBenefitInfo();
+        }
+        console.log(`Total: ${answer/count}`);
+      }
+
     public async getBenefitInfo(username: String) {
+        const startTime = performance.now();
         const userController = UserController.getInstance();
         const invoiceController = InvoiceController.getInstance();
         const points = new Array;
@@ -108,8 +134,9 @@ class PointsController {
         }
 
         points.sort(compare)
-        
-        return {user: user, points: points};
+        const endTime = performance.now();
+        return (6+(2*medicines.length))/(endTime-startTime);
+        //return {user: user, points: points};
 
         
   }

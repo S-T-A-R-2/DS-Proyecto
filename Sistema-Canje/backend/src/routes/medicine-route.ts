@@ -13,6 +13,14 @@ router.get('/getmedicines', async (req, res) => {
     res.status(500).json({ message: "AAAA", error: error.message });  
   }
 });
+router.get('/getmedicines-test', async (req, res) => {
+  try {
+      const invoices = await medicineController.getMedicinesTest(req.body.count);
+      res.status(201).json(invoices);
+  } catch (error: any) {
+      res.status(500).json({message: error.message });
+  }
+});
 
 router.get('/filter-medicines', async (req, res) => {
   const {searchName, inBenefitsProgram} = req.query;
@@ -40,6 +48,16 @@ router.put('/updateRedeem', async (req, res) => {
   }
 });
 
+router.put('/updateRedeemTest', async (req, res) => {
+  const { name, redeeming_points, count } = req.body;
+  //console.log(req.body);
+  try {
+    const medicine = await medicineController.updateRedeemPointsTest(name, redeeming_points, count);
+  } catch (error: any) {
+    res.status(500).json({message: "Error updating redeeming points",error: error.message});
+  }
+});
+
 router.put('/updateGiven', async (req, res) => {
   const {name, points_given} = req.body;
   //console.log(req.body);
@@ -54,4 +72,16 @@ router.put('/updateGiven', async (req, res) => {
         res.status(500).json({message: "Error updating given points", error: error.message});
   }
 });
+
+router.put('/updateGivenTest', async (req, res) => {
+  const {name, points_given, count} = req.body;
+  //console.log(req.body);
+  try {
+    const medicine = await medicineController.updateGivenPointsTest(name, points_given, count);
+    
+  } catch (error: any) {
+        res.status(500).json({message: "Error updating given points", error: error.message});
+  }
+});
+
 export default router;

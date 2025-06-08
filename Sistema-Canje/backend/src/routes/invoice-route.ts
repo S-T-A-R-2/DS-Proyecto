@@ -34,6 +34,15 @@ router.get('/filter-invoices', async (req, res) => {
         res.status(500).json({message: error.message });
     }
 });
+router.get('/filter-invoices-test', async (req, res) => {
+    try {
+        const invoices = await invoiceController.filterInvoicesTest(req.body.stateFilter, 
+            req.body.dateRangeFilter, req.body.searchInvoiceNumber, req.body.userFilter, req.body.count);
+        res.status(201).json(invoices);
+    } catch (error: any) {
+        res.status(500).json({message: error.message });
+    }
+});
 
 router.get('/getImage', async (req, res) => {
     if (typeof req.query.number == 'string'){

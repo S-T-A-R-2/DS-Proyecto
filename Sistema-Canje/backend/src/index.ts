@@ -22,7 +22,7 @@ connectDB();
 //origin: 'https://ds-proyecto-1.onrender.com',
 const app = express();
 app.use(cors({
-    origin: 'https://ds-proyecto-1.onrender.com',
+    origin: 'http://localhost:3000',
     credentials: true
 }));
 
